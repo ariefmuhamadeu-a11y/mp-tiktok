@@ -1,0 +1,2258 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Dashboard pesanan, pengiriman, keuangan, dan kalkulator harga jual TikTok Shop.">
+    <title>MP-TikTok Workspace</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --text: #172033;
+            --muted: #64748b;
+            --card: #ffffff;
+            --card-soft: #f8fafc;
+            --accent: #2563eb;
+            --accent-soft: rgba(37, 99, 235, .11);
+        }
+
+        * { box-sizing: border-box; }
+
+        html { min-height: 100%; }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background: #f1f5f9;
+            color: var(--text);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        button, input { font: inherit; }
+
+        body[data-theme="dark"] {
+            --text: #e5e7eb;
+            --muted: #94a3b8;
+            --card: #172033;
+            --card-soft: #202b3f;
+            --accent: #60a5fa;
+            --accent-soft: rgba(96, 165, 250, .16);
+            background: #0f172a;
+        }
+
+        [hidden] { display: none !important; }
+
+        .app-layout {
+            display: grid;
+            grid-template-columns: 250px minmax(0, 1fr);
+            grid-template-rows: auto 1fr;
+            min-height: 100vh;
+            padding-top: 76px;
+        }
+
+        .app-global-topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 20;
+            display: grid;
+            grid-column: 1 / -1;
+            grid-template-columns: 250px minmax(0, 1fr);
+            width: 100%;
+            height: 76px;
+            background: var(--card);
+            border-bottom: 1px solid rgba(148, 163, 184, .22);
+        }
+
+        .app-sidebar {
+            position: fixed;
+            top: 76px;
+            bottom: 0;
+            left: 0;
+            z-index: 10;
+            display: flex;
+            width: 250px;
+            height: auto;
+            min-height: 0;
+            flex-direction: column;
+            padding: 1.25rem 1rem;
+            background: var(--card);
+            border-right: 1px solid rgba(148, 163, 184, .22);
+            overflow: hidden;
+        }
+
+        .app-global-topbar .app-brand {
+            min-height: 76px;
+            padding: .9rem 1.5rem;
+            border-right: 1px solid rgba(148, 163, 184, .22);
+        }
+
+        .app-brand {
+            display: flex;
+            align-items: center;
+            gap: .7rem;
+            padding: .25rem .5rem 1.5rem;
+            color: var(--text);
+            font-size: 1.05rem;
+            font-weight: 800;
+            letter-spacing: -.02em;
+        }
+
+        .app-brand-mark {
+            display: grid;
+            width: 34px;
+            height: 34px;
+            place-items: center;
+            border-radius: 11px;
+            color: #fff;
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            box-shadow: 0 8px 18px rgba(37, 99, 235, .25);
+        }
+
+        .app-nav-label {
+            padding: 0 .6rem .55rem;
+            color: var(--muted);
+            font-size: .68rem;
+            font-weight: 800;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        .app-nav {
+            display: grid;
+            gap: .35rem;
+        }
+
+        .app-nav button,
+        .app-nav a {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            gap: .7rem;
+            border: 0;
+            border-radius: 11px;
+            padding: .7rem .75rem;
+            color: var(--muted);
+            background: transparent;
+            font-size: .84rem;
+            font-weight: 650;
+            text-align: left;
+            cursor: pointer;
+            text-decoration: none;
+            transition: .15s ease;
+        }
+
+        .app-nav button:hover,
+        .app-nav button.active,
+        .app-nav a:hover,
+        .app-nav a.active {
+            color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .app-nav button i,
+        .app-nav a i {
+            width: 1.1rem;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .app-sidebar-footer {
+            margin-top: auto;
+            padding: .8rem .6rem 0;
+            border-top: 1px solid rgba(148, 163, 184, .18);
+            color: var(--muted);
+            font-size: .72rem;
+            line-height: 1.45;
+        }
+
+        .app-main {
+            grid-column: 2;
+            grid-row: 2;
+            width: auto;
+            min-width: 0;
+        }
+
+        .app-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            min-height: 76px;
+            padding: .9rem 1.5rem;
+            background: var(--card);
+        }
+
+        .app-topbar-copy {
+            min-width: 0;
+        }
+
+        .app-topbar-eyebrow {
+            margin: 0 0 .15rem;
+            color: var(--muted);
+            font-size: .67rem;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .app-topbar-title {
+            margin: 0;
+            color: var(--text);
+            font-size: 1.15rem;
+            font-weight: 800;
+        }
+
+        .app-topbar-subtitle {
+            margin: .15rem 0 0;
+            color: var(--muted);
+            font-size: .78rem;
+        }
+
+        .app-topbar-subtitle:empty { display: none; }
+
+        .app-topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: .65rem;
+            flex: 0 0 auto;
+        }
+
+        .app-status {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            border: 1px solid rgba(34, 197, 94, .2);
+            border-radius: 999px;
+            padding: .4rem .65rem;
+            color: #15803d;
+            background: rgba(34, 197, 94, .08);
+            font-size: .72rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .app-status i { font-size: .5rem; }
+        .app-status.offline { border-color: rgba(220, 38, 38, .2); background: rgba(220, 38, 38, .08); color: #b91c1c; }
+
+        .app-topbar .pc-theme-toggle {
+            margin: 0;
+            padding: .45rem .7rem;
+            font-size: .76rem;
+        }
+
+        body[data-theme="dark"] .app-status {
+            color: #86efac;
+            background: rgba(34, 197, 94, .12);
+        }
+
+        .dashboard-wrap {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem 4rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: .85rem;
+            margin-top: 1rem;
+        }
+
+        .dashboard-card {
+            padding: 1rem;
+            border: 1px solid rgba(148, 163, 184, .24);
+            border-radius: 16px;
+            background: var(--card);
+            box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
+        }
+
+        .dashboard-card .card-icon {
+            display: grid;
+            width: 36px;
+            height: 36px;
+            place-items: center;
+            margin-bottom: .8rem;
+            border-radius: 11px;
+            color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .dashboard-card h3 {
+            margin: 0;
+            color: var(--text);
+            font-size: .92rem;
+        }
+
+        .dashboard-card p {
+            margin: .3rem 0 0;
+            color: var(--muted);
+            font-size: .76rem;
+            line-height: 1.5;
+        }
+
+        .dashboard-hero {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.25rem;
+            border-radius: 18px;
+            color: #fff;
+            background: linear-gradient(135deg, #1d4ed8, #6d28d9);
+            box-shadow: 0 16px 32px rgba(37, 99, 235, .2);
+        }
+
+        .dashboard-hero h2 {
+            margin: 0;
+            font-size: 1.35rem;
+            letter-spacing: -.03em;
+        }
+
+        .dashboard-hero p {
+            max-width: 520px;
+            margin: .4rem 0 0;
+            color: rgba(255, 255, 255, .78);
+            font-size: .82rem;
+        }
+
+        .dashboard-action {
+            flex: 0 0 auto;
+            border: 0;
+            border-radius: 10px;
+            padding: .65rem .85rem;
+            color: #1e3a8a;
+            background: #fff;
+            font-size: .78rem;
+            font-weight: 750;
+            cursor: pointer;
+        }
+
+        .dashboard-section-title {
+            margin: 1.5rem 0 .75rem;
+            color: var(--text);
+            font-size: .92rem;
+            font-weight: 800;
+        }
+
+        @media (max-width: 820px) {
+            .app-layout { grid-template-columns: 76px minmax(0, 1fr); }
+            .app-global-topbar { grid-template-columns: 76px minmax(0, 1fr); }
+            .app-global-topbar .app-brand { padding-inline: 0; justify-content: center; }
+            .app-sidebar { width: auto; padding: 1rem .65rem; }
+            .app-brand { justify-content: center; padding-inline: 0; }
+            .app-brand-name, .app-nav-label, .app-nav button span, .app-nav a span, .app-sidebar-footer { display: none; }
+            .app-nav button, .app-nav a { justify-content: center; padding: .75rem; }
+            .app-main { width: auto; }
+            .app-topbar { padding-inline: 1rem; }
+            .dashboard-wrap { padding-inline: 1rem; }
+        }
+
+        @media (max-width: 640px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .dashboard-hero { align-items: flex-start; flex-direction: column; }
+            .app-status { display: none; }
+        }
+
+        .pc-shell {
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .pc-theme-toggle {
+            display: block;
+            margin: 0 0 .75rem auto;
+            border: 1px solid rgba(148, 163, 184, .35);
+            background: var(--card);
+            color: var(--muted);
+            border-radius: 999px;
+            padding: .35rem .65rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 575px) {
+            .pc-shell { padding: .5rem; }
+        }
+
+        .pc-wrap {
+            max-width: 1180px;
+            margin-inline: auto;
+            padding: 1.1rem 1.5rem 4rem;
+        }
+
+        .pc-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: .85rem;
+        }
+
+        .pc-head h2 {
+            font-size: 1.08rem;
+            font-weight: 800;
+            margin: 0;
+            color: var(--text);
+            letter-spacing: -.025em;
+        }
+
+        .pc-grid {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+            align-items: start;
+        }
+
+        @media (max-width: 991px) {
+            .pc-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .pc-wrap { padding: .85rem 1rem 3rem; }
+            .pc-head {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 0;
+            }
+            .pc-head h2 { font-size: 1rem; }
+            .pc-grid { gap: .8rem; }
+        }
+
+        .pc-card {
+            background: var(--card);
+            border-radius: 18px;
+            border: 1px solid rgba(148, 163, 184, .28);
+            box-shadow: 0 10px 24px rgba(15, 23, 42, .06), 0 0 0 1px rgba(15, 23, 42, .03);
+            padding: 1.15rem 1.1rem;
+        }
+
+        .pc-card-heading {
+            display: flex;
+            align-items: flex-start;
+            gap: .7rem;
+            margin-bottom: 1rem;
+        }
+
+        .pc-card-icon {
+            display: grid;
+            width: 34px;
+            height: 34px;
+            flex: 0 0 auto;
+            place-items: center;
+            border-radius: 10px;
+            color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .pc-card-heading h2,
+        .pc-result-title {
+            margin: 0;
+            color: var(--text);
+            font-size: .95rem;
+            font-weight: 800;
+        }
+
+        .pc-result-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: .75rem;
+            margin-bottom: .9rem;
+        }
+
+        .pc-result-header .pc-card-icon { margin-bottom: .55rem; }
+
+        .pc-result-title-wrap { min-width: 0; }
+
+        @media (min-width: 992px) {
+            .pc-sticky {
+                position: sticky;
+                top: 1rem;
+            }
+        }
+
+        /* Mode toggle */
+        .pc-modes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .35rem;
+            background: var(--card-soft);
+            border: 1px solid rgba(148, 163, 184, .28);
+            border-radius: 12px;
+            padding: .3rem;
+            margin-bottom: 1rem;
+        }
+
+        .pc-modes button {
+            border: 0;
+            background: transparent;
+            border-radius: 9px;
+            padding: .5rem .4rem;
+            font-size: .82rem;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            transition: .15s;
+        }
+
+        .pc-modes button.active {
+            background: var(--card);
+            color: var(--accent);
+            box-shadow: 0 2px 8px rgba(15, 23, 42, .08);
+        }
+
+        .pc-field {
+            margin-bottom: .85rem;
+        }
+
+        .pc-field label {
+            display: block;
+            font-size: .76rem;
+            font-weight: 600;
+            color: var(--muted);
+            margin-bottom: .3rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+
+        .pc-field-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: .3rem;
+        }
+
+        .pc-field-head label {
+            margin: 0;
+        }
+
+        .pc-unit-toggle {
+            display: inline-flex;
+            border: 1px solid rgba(148, 163, 184, .4);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .pc-unit-toggle button {
+            border: 0;
+            background: transparent;
+            color: var(--muted);
+            font-size: .7rem;
+            font-weight: 700;
+            padding: .12rem .55rem;
+            cursor: pointer;
+            transition: .12s;
+        }
+
+        .pc-unit-toggle button.active {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .pc-fee-hint {
+            font-size: .72rem;
+            color: var(--accent);
+            margin-top: .3rem;
+            min-height: .9rem;
+        }
+
+        .pc-custom-costs {
+            margin: .95rem 0 .9rem;
+            padding-top: .9rem;
+            border-top: 1px solid rgba(148, 163, 184, .2);
+        }
+
+        .pc-custom-head {
+            margin-bottom: .45rem;
+        }
+
+        .pc-custom-total {
+            color: var(--muted);
+            font-size: .72rem;
+            font-weight: 700;
+        }
+
+        .pc-custom-row {
+            display: grid;
+            grid-template-columns: 4.25rem minmax(0, 1fr) minmax(130px, 1.15fr) 30px;
+            align-items: center;
+            gap: .45rem;
+            margin-top: .45rem;
+        }
+
+        .pc-custom-name-input {
+            width: 100%;
+            min-width: 0;
+            grid-column: 2;
+            grid-row: 1;
+            border: 1px solid rgba(148, 163, 184, .4);
+            border-radius: 10px;
+            padding: .58rem .65rem;
+            color: var(--text);
+            background: var(--card-soft);
+            font-size: .82rem;
+            outline: none;
+        }
+
+        .pc-custom-name-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+
+        .pc-custom-entry {
+            display: contents;
+        }
+
+        .pc-custom-entry .pc-input {
+            min-width: 0;
+            grid-column: 3;
+            grid-row: 1;
+        }
+
+        .pc-custom-entry .pc-unit-toggle {
+            display: flex;
+            width: 100%;
+            min-height: 2.12rem;
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .pc-custom-entry .pc-unit-toggle button {
+            flex: 1;
+            min-width: 0;
+            padding: .35rem .2rem;
+        }
+
+        .pc-custom-remove {
+            display: grid;
+            width: 30px;
+            height: 30px;
+            grid-column: 4;
+            grid-row: 1;
+            place-items: center;
+            border: 0;
+            border-radius: 9px;
+            color: var(--muted);
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .pc-custom-remove:hover {
+            color: #dc2626;
+            background: rgba(239, 68, 68, .1);
+        }
+
+        .pc-add-custom {
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            margin-top: .55rem;
+            border: 1px dashed rgba(37, 99, 235, .45);
+            border-radius: 9px;
+            padding: .42rem .62rem;
+            color: var(--accent);
+            background: transparent;
+            font-size: .74rem;
+            font-weight: 750;
+            cursor: pointer;
+        }
+
+        .pc-add-custom:hover { background: var(--accent-soft); }
+
+        .pc-quick-add {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .35rem;
+            margin-top: .5rem;
+        }
+
+        .pc-quick-add button {
+            border: 1px solid rgba(148, 163, 184, .35);
+            border-radius: 999px;
+            padding: .28rem .55rem;
+            color: var(--muted);
+            background: transparent;
+            font-size: .7rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .pc-quick-add button:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        @media (max-width: 575px) {
+            .pc-custom-row {
+                grid-template-columns: 4.25rem minmax(0, 1fr) 30px;
+                row-gap: .35rem;
+            }
+
+            .pc-custom-name-input { grid-column: 2; grid-row: 1; }
+            .pc-custom-entry .pc-unit-toggle { grid-column: 1; grid-row: 1; }
+            .pc-custom-entry .pc-input { grid-column: 1 / 3; grid-row: 2; }
+            .pc-custom-remove { grid-column: 3; grid-row: 1; }
+        }
+
+        /* Toggle switch PPN */
+        .pc-switch {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            cursor: pointer;
+            margin-top: .35rem;
+            padding: .6rem .7rem;
+            border-radius: 12px;
+            background: var(--card-soft);
+            border: 1px solid rgba(148, 163, 184, .22);
+        }
+
+        .pc-switch input {
+            display: none;
+        }
+
+        .pc-switch-track {
+            flex: 0 0 auto;
+            width: 38px;
+            height: 22px;
+            border-radius: 999px;
+            background: rgba(148, 163, 184, .5);
+            position: relative;
+            transition: .18s;
+        }
+
+        .pc-switch-knob {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #fff;
+            transition: .18s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .25);
+        }
+
+        .pc-switch input:checked + .pc-switch-track {
+            background: var(--accent);
+        }
+
+        .pc-switch input:checked + .pc-switch-track .pc-switch-knob {
+            left: 18px;
+        }
+
+        .pc-switch-label {
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.15;
+        }
+
+        .pc-switch-label small {
+            display: block;
+            font-size: .68rem;
+            font-weight: 500;
+            color: var(--muted);
+        }
+
+        .pc-cap {
+            font-size: .72rem;
+            color: var(--muted);
+            margin: .4rem 0 0;
+            display: none;
+        }
+
+        .pc-input {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .pc-input .affix {
+            position: absolute;
+            font-size: .9rem;
+            color: var(--muted);
+            pointer-events: none;
+        }
+
+        .pc-input .affix.pre {
+            left: .7rem;
+        }
+
+        .pc-input .affix.suf {
+            right: .7rem;
+        }
+
+        .pc-input input {
+            width: 100%;
+            border-radius: 11px;
+            border: 1px solid rgba(148, 163, 184, .4);
+            background: var(--card-soft);
+            color: var(--text);
+            font-size: 1.02rem;
+            font-weight: 600;
+            padding: .6rem .75rem;
+            outline: none;
+            transition: .15s;
+        }
+
+        .pc-input.has-pre input {
+            padding-left: 2.1rem;
+        }
+
+        .pc-input.has-suf input {
+            padding-right: 2rem;
+        }
+
+        .pc-input input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+
+        /* Presets */
+        .pc-presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .3rem;
+            margin-top: .4rem;
+        }
+
+        .pc-preset {
+            border: 1px solid rgba(148, 163, 184, .4);
+            background: transparent;
+            color: var(--muted);
+            border-radius: 999px;
+            padding: .2rem .6rem;
+            font-size: .74rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .12s;
+        }
+
+        .pc-preset:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .pc-preset.active {
+            background: var(--accent-soft);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Result highlight */
+        .pc-hl {
+            text-align: center;
+            padding: 1.1rem .75rem 1.25rem;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent-soft), transparent);
+            border: 1px solid rgba(148, 163, 184, .25);
+            margin-bottom: 1rem;
+        }
+
+        .pc-hl .lbl {
+            font-size: .74rem;
+            font-weight: 700;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .pc-hl .val {
+            font-size: 2.4rem;
+            font-weight: 800;
+            line-height: 1.05;
+            color: var(--text);
+            margin: .25rem 0;
+        }
+
+        .pc-hl .sub {
+            font-size: .8rem;
+            color: var(--muted);
+            display: none;
+        }
+
+        .pc-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .4rem;
+            justify-content: center;
+            margin-top: .85rem;
+        }
+
+        .pc-chip {
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: var(--card);
+            border-radius: 10px;
+            padding: .4rem .7rem;
+            font-size: .9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .12s;
+        }
+
+        .pc-chip:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        /* Detail grid */
+        .pc-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: .6rem;
+        }
+
+        @media (max-width: 575px) {
+            .pc-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .pc-metric {
+            background: var(--card-soft);
+            border: 1px solid rgba(148, 163, 184, .22);
+            border-radius: 12px;
+            padding: .6rem .7rem;
+        }
+
+        .pc-metric .m-lbl {
+            font-size: .68rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+            color: var(--muted);
+        }
+
+        .pc-metric .m-val {
+            font-size: 1.02rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-top: .15rem;
+        }
+
+        .pc-metric .m-sub {
+            font-size: .72rem;
+            color: var(--muted);
+            margin-top: .05rem;
+        }
+
+        /* Badges status */
+        .pc-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            padding: .3rem .7rem;
+            border-radius: 999px;
+            font-size: .78rem;
+            font-weight: 700;
+            border: 1px solid transparent;
+        }
+
+        .pc-badge.aman {
+            background: rgba(16, 185, 129, .14);
+            border-color: rgba(16, 185, 129, .4);
+            color: #059669;
+        }
+
+        .pc-badge.mepet {
+            background: rgba(245, 158, 11, .16);
+            border-color: rgba(245, 158, 11, .4);
+            color: #b45309;
+        }
+
+        .pc-badge.rugi {
+            background: rgba(239, 68, 68, .14);
+            border-color: rgba(239, 68, 68, .4);
+            color: #dc2626;
+        }
+
+        /* Warnings */
+        .pc-warn {
+            display: flex;
+            gap: .5rem;
+            align-items: flex-start;
+            background: rgba(239, 68, 68, .1);
+            border: 1px solid rgba(239, 68, 68, .35);
+            color: #b91c1c;
+            border-radius: 11px;
+            padding: .6rem .75rem;
+            font-size: .82rem;
+            margin-bottom: .85rem;
+        }
+
+        body[data-theme="dark"] .pc-warn {
+            color: #fca5a5;
+        }
+
+        /* Sub sections */
+        .pc-sub-title {
+            font-size: .82rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 1.15rem 0 .5rem;
+            display: flex;
+            align-items: center;
+            gap: .4rem;
+        }
+
+        .pc-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .82rem;
+        }
+
+        .pc-table th {
+            text-align: right;
+            font-size: .68rem;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            color: var(--muted);
+            padding: .4rem .5rem;
+            border-bottom: 1px solid rgba(148, 163, 184, .25);
+        }
+
+        .pc-table th:first-child,
+        .pc-table td:first-child {
+            text-align: left;
+        }
+
+        .pc-table td {
+            padding: .45rem .5rem;
+            text-align: right;
+            color: var(--text);
+            border-bottom: 1px solid rgba(148, 163, 184, .14);
+        }
+
+        .pc-table tr.hi td {
+            background: var(--accent-soft);
+            font-weight: 700;
+        }
+
+        .pc-collapse-btn {
+            width: 100%;
+            text-align: left;
+            border: 1px dashed rgba(148, 163, 184, .5);
+            background: transparent;
+            color: var(--muted);
+            border-radius: 11px;
+            padding: .55rem .75rem;
+            font-size: .82rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1.2rem;
+        }
+
+        .pc-range-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .6rem;
+            margin: .75rem 0;
+        }
+
+        /* Mode-conditional visibility */
+        .pc-body.mode-determine .only-analyze {
+            display: none;
+        }
+
+        .pc-body.mode-analyze .only-determine {
+            display: none;
+        }
+
+        /* Store management */
+        .store-wrap {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem 4rem;
+        }
+
+        .store-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .store-head h2 {
+            margin: 0;
+            color: var(--text);
+            font-size: 1.08rem;
+            letter-spacing: -.03em;
+        }
+
+        .store-head p {
+            margin: .35rem 0 0;
+            color: var(--muted);
+            font-size: .8rem;
+        }
+
+        .store-layout {
+            display: grid;
+            grid-template-columns: 340px minmax(0, 1fr);
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .store-card {
+            min-width: 0;
+            padding: 1.1rem;
+            border: 1px solid rgba(148, 163, 184, .26);
+            border-radius: 18px;
+            background: var(--card);
+            box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
+        }
+
+        .store-form-card {
+            position: sticky;
+            top: 1rem;
+        }
+
+        .store-card-title {
+            display: flex;
+            align-items: flex-start;
+            gap: .7rem;
+            margin-bottom: 1rem;
+        }
+
+        .store-card-title .card-icon {
+            display: grid;
+            width: 34px;
+            height: 34px;
+            flex: 0 0 auto;
+            place-items: center;
+            border-radius: 10px;
+            color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .store-card-title h2 {
+            margin: 0;
+            color: var(--text);
+            font-size: .95rem;
+        }
+
+        .store-card-title p {
+            margin: .2rem 0 0;
+            color: var(--muted);
+            font-size: .75rem;
+        }
+
+        .store-field {
+            margin-bottom: .8rem;
+        }
+
+        .store-field label {
+            display: block;
+            margin-bottom: .3rem;
+            color: var(--muted);
+            font-size: .72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+
+        .store-field input,
+        .store-field textarea {
+            width: 100%;
+            border: 1px solid rgba(148, 163, 184, .4);
+            border-radius: 10px;
+            padding: .62rem .7rem;
+            color: var(--text);
+            background: var(--card-soft);
+            outline: none;
+            resize: vertical;
+        }
+
+        .store-field input:focus,
+        .store-field textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+
+        .store-form-actions {
+            display: flex;
+            gap: .5rem;
+            margin-top: .95rem;
+        }
+
+        .store-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: .35rem;
+            border: 1px solid rgba(148, 163, 184, .4);
+            border-radius: 10px;
+            padding: .58rem .75rem;
+            color: var(--muted);
+            background: transparent;
+            font-size: .78rem;
+            font-weight: 750;
+            cursor: pointer;
+        }
+
+        .store-btn.primary {
+            flex: 1;
+            border-color: var(--accent);
+            color: #fff;
+            background: var(--accent);
+        }
+
+        .store-btn.primary:hover { filter: brightness(1.06); }
+
+        .store-btn:hover:not(.primary) {
+            color: var(--accent);
+            border-color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .store-status {
+            margin-top: .8rem;
+            border-radius: 10px;
+            padding: .6rem .7rem;
+            color: var(--accent);
+            background: var(--accent-soft);
+            font-size: .75rem;
+        }
+
+        .store-status.success { color: #15803d; background: rgba(34, 197, 94, .1); }
+        .store-status.error { color: #b91c1c; background: rgba(239, 68, 68, .1); }
+
+        .store-list-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: .9rem;
+        }
+
+        .store-list-head h2 {
+            margin: 0;
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .store-list-head p {
+            margin: .2rem 0 0;
+            color: var(--muted);
+            font-size: .75rem;
+        }
+
+        .store-count {
+            color: var(--muted);
+            font-size: .75rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .store-table-wrap { overflow-x: auto; }
+
+        .store-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 590px;
+        }
+
+        .store-table th,
+        .store-table td {
+            padding: .75rem .6rem;
+            border-bottom: 1px solid rgba(148, 163, 184, .18);
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .store-table th {
+            color: var(--muted);
+            font-size: .68rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+
+        .store-table td {
+            color: var(--text);
+            font-size: .78rem;
+        }
+
+        .store-table td strong { display: block; font-size: .8rem; }
+        .store-description { display: block; margin-top: .15rem; color: var(--muted); font-size: .7rem; }
+        .store-muted { color: var(--muted); }
+
+        .store-active {
+            display: inline-flex;
+            align-items: center;
+            gap: .3rem;
+            color: #15803d;
+            font-size: .72rem;
+            font-weight: 700;
+        }
+
+        .store-actions-cell { white-space: nowrap; text-align: right !important; }
+
+        .store-icon-btn {
+            display: inline-grid;
+            width: 30px;
+            height: 30px;
+            margin-left: .25rem;
+            place-items: center;
+            border: 0;
+            border-radius: 8px;
+            color: var(--muted);
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .store-icon-btn:hover { color: var(--accent); background: var(--accent-soft); }
+        .store-icon-btn.danger:hover { color: #dc2626; background: rgba(239, 68, 68, .1); }
+
+        .store-empty {
+            padding: 2rem 1rem;
+            color: var(--muted);
+            text-align: center;
+            font-size: .8rem;
+        }
+
+        .store-empty i { display: block; margin-bottom: .45rem; font-size: 1.6rem; }
+
+        @media (max-width: 1040px) {
+            .store-layout { grid-template-columns: 1fr; }
+            .store-form-card { position: static; }
+        }
+
+        @media (max-width: 640px) {
+            .store-wrap { padding-inline: 1rem; }
+            .store-head { align-items: flex-start; flex-direction: column; gap: .25rem; }
+        }
+
+        /* Shipment import */
+        .shipment-wrap {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem 4rem;
+        }
+
+        .shipment-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .shipment-head h2 {
+            margin: 0;
+            color: var(--text);
+            font-size: 1.08rem;
+            letter-spacing: -.03em;
+        }
+
+        .shipment-head p {
+            margin: .35rem 0 0;
+            color: var(--muted);
+            font-size: .8rem;
+        }
+
+        .shipment-layout {
+            display: grid;
+            grid-template-columns: 340px minmax(0, 1fr);
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .shipment-card {
+            min-width: 0;
+            padding: 1.15rem;
+            border: 1px solid rgba(148, 163, 184, .28);
+            border-radius: 18px;
+            background: var(--card);
+            box-shadow: 0 10px 24px rgba(15, 23, 42, .06), 0 0 0 1px rgba(15, 23, 42, .03);
+        }
+
+        .shipment-card-title {
+            display: flex;
+            align-items: flex-start;
+            gap: .7rem;
+            margin-bottom: 1rem;
+        }
+
+        .shipment-card-title .card-icon {
+            display: grid;
+            width: 34px;
+            height: 34px;
+            flex: 0 0 auto;
+            place-items: center;
+            border-radius: 10px;
+            color: var(--accent);
+            background: var(--accent-soft);
+        }
+
+        .shipment-card-title h2 {
+            margin: 0;
+            color: var(--text);
+            font-size: .95rem;
+        }
+
+        .shipment-card-title p {
+            margin: .2rem 0 0;
+            color: var(--muted);
+            font-size: .74rem;
+        }
+
+        .shipment-label {
+            display: block;
+            margin-bottom: .4rem;
+            color: var(--text);
+            font-size: .76rem;
+            font-weight: 750;
+        }
+
+        .shipment-select {
+            width: 100%;
+            border: 1px solid rgba(148, 163, 184, .45);
+            border-radius: 10px;
+            padding: .65rem .75rem;
+            color: var(--text);
+            background: var(--card);
+            outline: none;
+        }
+
+        .shipment-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+
+        .shipment-dropzone {
+            display: flex;
+            min-height: 170px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: .55rem;
+            margin-top: 1rem;
+            border: 1.5px dashed rgba(37, 99, 235, .45);
+            border-radius: 14px;
+            padding: 1rem;
+            color: var(--muted);
+            background: var(--accent-soft);
+            text-align: center;
+            cursor: pointer;
+            transition: .15s ease;
+        }
+
+        .shipment-dropzone:hover,
+        .shipment-dropzone.is-dragging {
+            border-color: var(--accent);
+            background: rgba(37, 99, 235, .16);
+            transform: translateY(-1px);
+        }
+
+        .shipment-dropzone i {
+            color: var(--accent);
+            font-size: 1.8rem;
+        }
+
+        .shipment-dropzone strong {
+            color: var(--text);
+            font-size: .82rem;
+        }
+
+        .shipment-dropzone span {
+            font-size: .72rem;
+        }
+
+        .shipment-input {
+            display: none;
+        }
+
+        .shipment-file-list {
+            display: grid;
+            gap: .45rem;
+            margin-top: .75rem;
+        }
+
+        .shipment-file {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: .65rem;
+            border: 1px solid rgba(148, 163, 184, .2);
+            border-radius: 10px;
+            padding: .55rem .65rem;
+            background: var(--card-soft);
+        }
+
+        .shipment-file-copy {
+            display: flex;
+            min-width: 0;
+            align-items: center;
+            gap: .5rem;
+        }
+
+        .shipment-file-copy i { color: #16a34a; }
+
+        .shipment-file-name {
+            overflow: hidden;
+            color: var(--text);
+            font-size: .72rem;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .shipment-file-size {
+            color: var(--muted);
+            font-size: .66rem;
+            white-space: nowrap;
+        }
+
+        .shipment-remove {
+            border: 0;
+            padding: .2rem;
+            color: var(--muted);
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .shipment-remove:hover { color: #dc2626; }
+
+        .shipment-note {
+            display: flex;
+            gap: .45rem;
+            margin-top: 1rem;
+            color: var(--muted);
+            font-size: .7rem;
+            line-height: 1.5;
+        }
+
+        .shipment-note i { color: var(--accent); }
+
+        .shipment-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: .6rem;
+            margin-top: 1rem;
+        }
+
+        .shipment-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: .45rem;
+            min-height: 36px;
+            border: 1px solid rgba(148, 163, 184, .35);
+            border-radius: 10px;
+            padding: .55rem .8rem;
+            color: var(--muted);
+            background: var(--card);
+            font-size: .76rem;
+            font-weight: 750;
+            cursor: pointer;
+        }
+
+        .shipment-btn.primary {
+            border-color: var(--accent);
+            color: #fff;
+            background: var(--accent);
+            box-shadow: 0 7px 16px rgba(37, 99, 235, .2);
+        }
+
+        .shipment-btn.primary:hover { filter: brightness(1.06); }
+        .shipment-btn:disabled { cursor: not-allowed; opacity: .5; box-shadow: none; }
+
+        .shipment-status {
+            margin-top: .7rem;
+            border-radius: 10px;
+            padding: .6rem .7rem;
+            color: var(--muted);
+            background: var(--card-soft);
+            font-size: .72rem;
+        }
+
+        .shipment-status.success {
+            color: #15803d;
+            background: rgba(34, 197, 94, .1);
+        }
+
+        .shipment-status.error {
+            color: #b91c1c;
+            background: rgba(239, 68, 68, .1);
+        }
+
+        .shipment-summary {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: .6rem;
+            margin-bottom: .9rem;
+        }
+
+        .shipment-stat {
+            border: 1px solid rgba(148, 163, 184, .2);
+            border-radius: 12px;
+            padding: .7rem;
+            background: var(--card-soft);
+        }
+
+        .shipment-stat-label {
+            color: var(--muted);
+            font-size: .66rem;
+            font-weight: 700;
+        }
+
+        .shipment-stat-value {
+            margin-top: .2rem;
+            color: var(--text);
+            font-size: 1.1rem;
+            font-weight: 850;
+        }
+
+        .shipment-stat-value.success { color: #16a34a; }
+        .shipment-stat-value.warning { color: #d97706; }
+
+        .shipment-preview-empty {
+            display: grid;
+            min-height: 365px;
+            place-items: center;
+            border: 1px dashed rgba(148, 163, 184, .38);
+            border-radius: 14px;
+            padding: 2rem;
+            color: var(--muted);
+            background: var(--card-soft);
+            text-align: center;
+        }
+
+        .shipment-preview-empty i {
+            display: block;
+            margin-bottom: .65rem;
+            color: #94a3b8;
+            font-size: 2.2rem;
+        }
+
+        .shipment-preview-empty strong {
+            display: block;
+            margin-bottom: .25rem;
+            color: var(--text);
+            font-size: .85rem;
+        }
+
+        .shipment-preview-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: .75rem;
+        }
+
+        .shipment-preview-toolbar h2 {
+            margin: 0;
+            color: var(--text);
+            font-size: .95rem;
+        }
+
+        .shipment-preview-toolbar p {
+            margin: .2rem 0 0;
+            color: var(--muted);
+            font-size: .72rem;
+        }
+
+        .shipment-table-wrap {
+            overflow: auto;
+            border: 1px solid rgba(148, 163, 184, .22);
+            border-radius: 12px;
+        }
+
+        .shipment-table {
+            width: 100%;
+            min-width: 680px;
+            border-collapse: collapse;
+            font-size: .73rem;
+        }
+
+        .shipment-table th {
+            padding: .65rem .7rem;
+            color: var(--muted);
+            background: var(--card-soft);
+            font-size: .66rem;
+            font-weight: 800;
+            text-align: left;
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            white-space: nowrap;
+        }
+
+        .shipment-table td {
+            max-width: 190px;
+            overflow: hidden;
+            padding: .65rem .7rem;
+            color: var(--text);
+            border-top: 1px solid rgba(148, 163, 184, .14);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .shipment-table td.muted { color: var(--muted); }
+
+        .shipment-pill {
+            display: inline-flex;
+            border-radius: 999px;
+            padding: .18rem .45rem;
+            color: #475569;
+            background: #e2e8f0;
+            font-size: .64rem;
+            font-weight: 750;
+        }
+
+        body[data-theme="dark"] .shipment-pill { color: #cbd5e1; background: #334155; }
+
+        .shipment-preview-foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: .75rem;
+            color: var(--muted);
+            font-size: .7rem;
+        }
+
+        .shipment-preview-foot i { color: #16a34a; }
+
+        @media (max-width: 1040px) {
+            .shipment-layout { grid-template-columns: 1fr; }
+            .shipment-sidebar-card { order: 1; }
+            .shipment-preview-card { order: 0; }
+        }
+
+        @media (max-width: 640px) {
+            .shipment-wrap { padding-inline: 1rem; }
+            .shipment-head { align-items: flex-start; flex-direction: column; gap: .25rem; }
+            .shipment-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .shipment-preview-toolbar { align-items: flex-start; flex-direction: column; gap: .2rem; }
+        }
+
+        .app-sidebar { overflow-y: auto; }
+        .app-nav-label:not(:first-child) { margin-top: 1.4rem; }
+        .app-nav a.active { box-shadow: inset 3px 0 var(--accent); }
+        .app-sidebar-footer strong { display: block; margin-bottom: .2rem; color: var(--text); font-size: .78rem; }
+        .app-menu-toggle { display: none; border: 0; background: transparent; color: var(--text); font-size: 1.2rem; cursor: pointer; }
+        .app-sidebar-backdrop { display: none; }
+        .workspace-wrap { max-width: 1320px; margin: 0 auto; padding: 1rem 1.5rem 4rem; }
+        .workspace-toolbar { display: flex; align-items: center; justify-content: space-between; gap: .8rem; margin-bottom: 1rem; }
+        .workspace-kicker { color: var(--muted); font-size: .78rem; }
+        .workspace-filter { min-width: 190px; max-width: 260px; border: 1px solid rgba(148, 163, 184, .35); border-radius: 10px; padding: .55rem .7rem; background: var(--card); color: var(--text); font: inherit; }
+        .workspace-notice { display: flex; align-items: flex-start; gap: .55rem; border: 1px solid rgba(59, 130, 246, .2); border-radius: 12px; padding: .75rem .9rem; background: var(--accent-soft); color: var(--text); font-size: .78rem; line-height: 1.5; }
+        .workspace-notice i { color: var(--accent); }
+        .workspace-notice.error { border-color: rgba(220, 38, 38, .25); background: rgba(220, 38, 38, .07); }
+        .workspace-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .85rem; margin: 1rem 0; }
+        .workspace-kpi, .workspace-panel { border: 1px solid rgba(148, 163, 184, .24); border-radius: 16px; background: var(--card); box-shadow: 0 8px 22px rgba(15, 23, 42, .04); }
+        .workspace-kpi { padding: 1rem 1.1rem; }
+        .workspace-kpi .label { display: flex; justify-content: space-between; gap: .4rem; color: var(--muted); font-size: .74rem; font-weight: 650; }
+        .workspace-kpi .label i { color: var(--accent); font-size: 1rem; }
+        .workspace-kpi .value { margin: .55rem 0 .2rem; color: var(--text); font-size: 1.55rem; font-weight: 800; letter-spacing: -.035em; }
+        .workspace-kpi .hint { color: var(--muted); font-size: .71rem; }
+        .workspace-columns { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(275px, .8fr); align-items: start; gap: .9rem; }
+        .workspace-panel { min-width: 0; overflow: hidden; }
+        .workspace-panel-head { display: flex; align-items: center; justify-content: space-between; gap: .6rem; padding: 1rem 1.1rem; border-bottom: 1px solid rgba(148, 163, 184, .18); }
+        .workspace-panel-head h2 { margin: 0; color: var(--text); font-size: .91rem; }
+        .workspace-panel-head p { margin: .2rem 0 0; color: var(--muted); font-size: .72rem; }
+        .workspace-link { border: 0; background: transparent; color: var(--accent); font-size: .75rem; font-weight: 750; cursor: pointer; white-space: nowrap; }
+        .workspace-table-wrap { overflow-x: auto; }
+        .workspace-table { width: 100%; border-collapse: collapse; font-size: .76rem; white-space: nowrap; }
+        .workspace-table th { padding: .7rem 1rem; background: var(--card-soft); color: var(--muted); text-align: left; font-size: .68rem; font-weight: 750; }
+        .workspace-table td { padding: .8rem 1rem; border-top: 1px solid rgba(148, 163, 184, .13); vertical-align: top; }
+        .workspace-table .product-cell { min-width: 220px; max-width: 320px; white-space: normal; }
+        .workspace-table .product-cell small, .workspace-table .muted-line { display: block; margin-top: .18rem; color: var(--muted); font-size: .7rem; }
+        .workspace-empty { padding: 2rem 1rem; color: var(--muted); text-align: center; }
+        .workspace-badge { display: inline-flex; border-radius: 999px; padding: .22rem .5rem; background: #f1f5f9; color: #475569; font-size: .68rem; font-weight: 750; }
+        .workspace-badge.success { background: #dcfce7; color: #166534; }
+        .workspace-badge.warning { background: #fef3c7; color: #92400e; }
+        body[data-theme="dark"] .workspace-badge { background: #334155; color: #cbd5e1; }
+        body[data-theme="dark"] .workspace-badge.success { background: #14532d; color: #bbf7d0; }
+        body[data-theme="dark"] .workspace-badge.warning { background: #78350f; color: #fef3c7; }
+        .workspace-action-list { display: grid; gap: .55rem; padding: 1rem; }
+        .workspace-action-list button { display: flex; align-items: center; gap: .7rem; width: 100%; border: 1px solid rgba(148, 163, 184, .22); border-radius: 11px; padding: .8rem; background: var(--card-soft); color: var(--text); text-align: left; cursor: pointer; }
+        .workspace-action-list button i:first-child { color: var(--accent); font-size: 1rem; }
+        .workspace-action-list button i:last-child { margin-left: auto; color: var(--muted); }
+        .workspace-action-list small { display: block; margin-top: .15rem; color: var(--muted); }
+        .workspace-action-list > div { border: 1px solid rgba(148, 163, 184, .22); border-radius: 11px; padding: .8rem; background: var(--card-soft); }
+        .workspace-stack { display: grid; gap: .9rem; }
+        .workspace-search { width: 100%; max-width: 280px; border: 1px solid rgba(148, 163, 184, .35); border-radius: 9px; padding: .5rem .7rem; background: var(--card); color: var(--text); font: inherit; }
+        .shipment-browser-only { margin-bottom: 1rem; }
+        @media (max-width: 1100px) { .workspace-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } .workspace-columns { grid-template-columns: 1fr; } }
+        @media (max-width: 820px) {
+            .app-layout { display: block; padding-top: 76px; }
+            .app-global-topbar { grid-template-columns: 72px minmax(0, 1fr); }
+            .app-menu-toggle { display: block; }
+            .app-sidebar { top: 76px; width: 260px; padding: 1.2rem .9rem; transform: translateX(-100%); transition: transform .2s ease; z-index: 30; }
+            body.sidebar-open .app-sidebar { transform: translateX(0); }
+            body.sidebar-open .app-sidebar-backdrop { display: block; position: fixed; inset: 76px 0 0; z-index: 25; background: rgba(15, 23, 42, .45); }
+            .app-nav-label, .app-nav a span, .app-sidebar-footer { display: block; }
+            .app-nav a { justify-content: flex-start; }
+            .workspace-wrap { padding-inline: 1rem; }
+        }
+        @media (max-width: 640px) {
+            .workspace-kpis { gap: .6rem; }
+            .workspace-kpi { padding: .85rem; }
+            .workspace-kpi .value { font-size: 1.25rem; }
+            .workspace-toolbar { align-items: stretch; flex-direction: column; }
+            .workspace-filter { max-width: none; }
+            .workspace-panel-head { align-items: flex-start; flex-direction: column; }
+            .dashboard-orders-table, .dashboard-orders-table tbody { display: block; width: 100%; }
+            .dashboard-orders-table thead { display: none; }
+            .dashboard-orders-table tr { display: grid; grid-template-columns: 1fr auto; gap: .45rem .6rem; padding: .9rem 1rem; border-top: 1px solid rgba(148, 163, 184, .15); }
+            .dashboard-orders-table td { padding: 0; border: 0; }
+            .dashboard-orders-table td:nth-child(2) { grid-column: 1 / -1; grid-row: 2; max-width: none; }
+            .dashboard-orders-table td:nth-child(3) { grid-column: 1; grid-row: 3; }
+            .dashboard-orders-table td:nth-child(4) { grid-column: 2; grid-row: 3; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-layout">
+        <div class="app-global-topbar">
+            <div class="app-brand">
+                <button type="button" class="app-menu-toggle" id="sidebarToggle" aria-label="Buka navigasi" aria-expanded="false"><i class="bi bi-list"></i></button>
+                <span class="app-brand-mark"><i class="bi bi-shop"></i></span>
+                <span class="app-brand-name">MP-TikTok</span>
+            </div>
+
+            <header class="app-topbar">
+                <div class="app-topbar-copy">
+                    <p class="app-topbar-eyebrow">MP-TikTok / Workspace</p>
+                    <h1 class="app-topbar-title" id="pageTitle">Dashboard</h1>
+                    <p class="app-topbar-subtitle" id="pageSubtitle">Ringkasan workspace MP-TikTok</p>
+                </div>
+                <div class="app-topbar-actions">
+                    <span class="app-status" id="backendStatus"><i class="bi bi-circle-fill"></i> Menghubungkan…</span>
+                    <button type="button" class="pc-theme-toggle" id="themeToggle" aria-label="Ganti tema">
+                        <i class="bi bi-moon-stars"></i> Tema
+                    </button>
+                </div>
+            </header>
+        </div>
+
+        <div class="app-sidebar-backdrop" id="sidebarBackdrop"></div>
+        <aside class="app-sidebar" aria-label="Navigasi utama">
+            <div class="app-nav-label">Ringkasan</div>
+            <nav class="app-nav">
+                <a class="active" data-page-target="dashboard" href="/" aria-label="Buka Dashboard" title="Dashboard">
+                    <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
+                </a>
+                <a data-page-target="orders" href="/pesanan" aria-label="Buka Pesanan dan Pengiriman" title="Pesanan dan Pengiriman">
+                    <i class="bi bi-box-seam"></i><span>Pesanan &amp; Pengiriman</span>
+                </a>
+                <a data-page-target="finance" href="/keuangan" aria-label="Buka Keuangan" title="Keuangan">
+                    <i class="bi bi-wallet2"></i><span>Keuangan</span>
+                </a>
+            </nav>
+            <div class="app-nav-label">Alat &amp; data</div>
+            <nav class="app-nav">
+                <a data-page-target="pricing" href="/penentuan-harga" aria-label="Buka Penentuan Harga" title="Penentuan Harga">
+                    <i class="bi bi-calculator-fill"></i><span>Penentuan Harga</span>
+                </a>
+                <a data-page-target="shipmentImport" href="/import-pengiriman" aria-label="Buka Import Pengiriman" title="Import Pengiriman">
+                    <i class="bi bi-cloud-arrow-up-fill"></i><span>Import Pengiriman</span>
+                </a>
+                <a data-page-target="stores" href="/toko" aria-label="Buka Toko" title="Toko">
+                    <i class="bi bi-shop-window"></i><span>Toko</span>
+                </a>
+            </nav>
+
+            <div class="app-sidebar-footer">
+                <strong>Workspace lokal</strong>
+                Data contoh database dan data browser ditampilkan terpisah.
+            </div>
+        </aside>
+
+        <div class="app-main">
+            <main class="pc-shell">
+                <section class="page-view" data-page-view="dashboard">
+                    <div class="workspace-wrap">
+                        <div class="workspace-toolbar">
+                            <span class="workspace-kicker">Ikhtisar dari database impor</span>
+                            <select class="workspace-filter" id="workspaceStore" data-workspace-store aria-label="Filter toko dashboard"><option value="">Memuat toko…</option></select>
+                        </div>
+                        <div class="workspace-notice" id="workspaceNotice" role="status"><i class="bi bi-arrow-repeat"></i><span>Memuat data contoh dari database…</span></div>
+                        <div class="workspace-kpis" id="dashboardKpis"></div>
+                        <div class="workspace-columns">
+                            <div class="workspace-stack">
+                                <section class="workspace-panel">
+                                    <div class="workspace-panel-head"><div><h2>Pesanan terbaru</h2><p>Produk, variasi, SKU, dan dana masuk saldo.</p></div><button type="button" class="workspace-link" data-page-target="orders">Lihat semua <i class="bi bi-arrow-right"></i></button></div>
+                                    <div class="workspace-table-wrap"><table class="workspace-table dashboard-orders-table"><thead><tr><th>Order ID</th><th>Produk</th><th>Status</th><th>Dana</th></tr></thead><tbody id="dashboardOrderRows"></tbody></table></div>
+                                </section>
+                                <section class="workspace-panel">
+                                    <div class="workspace-panel-head"><div><h2>Riwayat impor</h2><p>File yang sudah tercatat di database.</p></div></div>
+                                    <div class="workspace-table-wrap"><table class="workspace-table"><thead><tr><th>File</th><th>Jenis</th><th>Baris</th><th>Duplikat</th><th>Waktu</th></tr></thead><tbody id="dashboardImportRows"></tbody></table></div>
+                                </section>
+                            </div>
+                            <section class="workspace-panel">
+                                <div class="workspace-panel-head"><div><h2>Langkah berikutnya</h2><p>Akses cepat ke pekerjaan utama.</p></div></div>
+                                <div class="workspace-action-list">
+                                    <button type="button" data-page-target="shipmentImport"><i class="bi bi-cloud-arrow-up"></i><span><strong>Preview pengiriman</strong><small>Pilih toko dan beberapa file CSV/XLSX</small></span><i class="bi bi-chevron-right"></i></button>
+                                    <button type="button" data-page-target="finance"><i class="bi bi-wallet2"></i><span><strong>Cek pencairan</strong><small>Bedakan dana masuk saldo dan transfer bank</small></span><i class="bi bi-chevron-right"></i></button>
+                                    <button type="button" data-page-target="pricing"><i class="bi bi-calculator"></i><span><strong>Hitung harga jual</strong><small>HPP, biaya, margin, dan ROAS</small></span><i class="bi bi-chevron-right"></i></button>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="page-view" data-page-view="orders" hidden>
+                    <div class="workspace-wrap">
+                        <div class="workspace-toolbar"><span class="workspace-kicker">Maksimal 100 item terbaru dari toko terpilih</span><select class="workspace-filter" data-workspace-store aria-label="Filter toko pesanan"><option value="">Memuat toko…</option></select><input class="workspace-search" id="ordersSearch" type="search" placeholder="Cari order, produk, SKU, resi…" aria-label="Cari pesanan"></div>
+                        <div class="workspace-notice error" id="workspaceOrdersError" hidden role="alert"></div>
+                        <div class="workspace-notice"><i class="bi bi-info-circle"></i><span>Status kirim berasal dari file pesanan. Status dana berasal dari laporan keuangan dan tidak otomatis berarti uang sudah ditransfer ke bank.</span></div>
+                        <div class="workspace-kpis" id="ordersKpis"></div>
+                        <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Daftar item dikirim</h2><p id="ordersResultCount">—</p></div></div><div class="workspace-table-wrap"><table class="workspace-table"><thead><tr><th>Order ID</th><th>Produk / varian</th><th>SKU / Qty</th><th>Resi / kurir</th><th>Pengiriman</th><th>Dana</th><th>Nilai order</th></tr></thead><tbody id="ordersTableBody"></tbody></table></div></section>
+                    </div>
+                </section>
+
+                <section class="page-view" data-page-view="finance" hidden>
+                    <div class="workspace-wrap">
+                        <div class="workspace-toolbar"><span class="workspace-kicker">Laporan keuangan dari database impor</span><select class="workspace-filter" data-workspace-store aria-label="Filter toko keuangan"><option value="">Memuat toko…</option></select></div>
+                        <div class="workspace-notice error" id="workspaceFinanceError" hidden role="alert"></div>
+                        <div class="workspace-notice"><i class="bi bi-info-circle"></i><span>Dana masuk saldo dan penarikan ke bank adalah dua peristiwa berbeda. Penarikan belum bisa dikaitkan otomatis ke order tertentu tanpa referensi yang cocok.</span></div>
+                        <div class="workspace-kpis" id="financeKpis"></div>
+                        <div class="workspace-columns">
+                            <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Rekonsiliasi pesanan</h2><p>Pesanan file pengiriman dibandingkan dengan laporan pencairan.</p></div></div><div class="workspace-table-wrap"><table class="workspace-table"><thead><tr><th>Order ID</th><th>Nilai order</th><th>Status dana</th></tr></thead><tbody id="financeOrderRows"></tbody></table></div></section>
+                            <div class="workspace-stack">
+                                <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Perlu perhatian</h2><p>Data yang belum bisa dicocokkan otomatis.</p></div></div><div class="workspace-action-list" id="financeAttention"></div></section>
+                                <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Promosi &amp; diskon</h2><p>Hanya dari item pesanan yang diimpor.</p></div></div><div class="workspace-action-list" id="financePromotions"></div></section>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="page-view" data-page-view="pricing" hidden>
+    <div class="pc-wrap">
+        <div class="pc-body mode-determine" id="pcBody">
+            <div class="pc-grid">
+                <div class="pc-card">
+                    <div class="pc-card-heading">
+                        <span class="pc-card-icon"><i class="bi bi-sliders2"></i></span>
+                        <div>
+                            <h2>Parameter harga</h2>
+                        </div>
+                    </div>
+                    <div class="pc-modes">
+                        <button type="button" class="active" data-mode="determine">Tentukan Harga Jual</button>
+                        <button type="button" data-mode="analyze">Analisa Harga</button>
+                    </div>
+
+                    <div class="pc-field">
+                        <label>HPP</label>
+                        <div class="pc-input has-pre">
+                            <span class="affix pre">Rp</span>
+                            <input type="text" id="inpHpp" inputmode="numeric" autocomplete="off"
+                                class="js-money" placeholder="45.000" value="45.000">
+                        </div>
+                    </div>
+
+                    <div class="pc-field only-analyze">
+                        <label>Harga Jual</label>
+                        <div class="pc-input has-pre">
+                            <span class="affix pre">Rp</span>
+                            <input type="text" id="inpSelling" inputmode="numeric" autocomplete="off"
+                                class="js-money" placeholder="85.950">
+                        </div>
+                    </div>
+
+                    <div class="pc-custom-costs pc-marketplace-costs">
+                        <div class="pc-field-head pc-custom-head">
+                            <label>Biaya Marketplace</label>
+                            <span class="pc-custom-total" id="marketplaceCostTotal">—</span>
+                        </div>
+                        <div id="marketplaceCostsList"></div>
+                        <button type="button" class="pc-add-custom" id="addMarketplaceCost">
+                            <i class="bi bi-plus-lg"></i> Tambah biaya marketplace
+                        </button>
+                        <div class="pc-quick-add" aria-label="Tambah biaya cepat">
+                            <button type="button" data-marketplace-preset="Layanan" data-marketplace-preset-unit="pct">+ Layanan</button>
+                            <button type="button" data-marketplace-preset="Gratis ongkir" data-marketplace-preset-unit="rp">+ Gratis ongkir</button>
+                            <button type="button" data-marketplace-preset="Biaya admin" data-marketplace-preset-unit="rp">+ Biaya admin</button>
+                        </div>
+                    </div>
+
+                    <div class="pc-custom-costs">
+                        <div class="pc-field-head pc-custom-head">
+                            <label>Biaya Tambahan</label>
+                            <span class="pc-custom-total" id="customCostTotal">—</span>
+                        </div>
+                        <div id="customCostsList"></div>
+                        <button type="button" class="pc-add-custom" id="addCustomCost">
+                            <i class="bi bi-plus-lg"></i> Tambah biaya
+                        </button>
+                    </div>
+
+                    <div class="pc-field">
+                        <label>Target Profit</label>
+                        <div class="pc-input has-suf">
+                            <span class="affix suf">%</span>
+                            <input type="text" id="inpProfit" inputmode="decimal" autocomplete="off"
+                                class="js-dec" value="10">
+                        </div>
+                        <div class="pc-presets" data-preset-for="inpProfit">
+                            <button type="button" class="pc-preset" data-val="5">5%</button>
+                            <button type="button" class="pc-preset" data-val="10">10%</button>
+                            <button type="button" class="pc-preset" data-val="15">15%</button>
+                            <button type="button" class="pc-preset" data-val="20">20%</button>
+                        </div>
+                    </div>
+
+                    <div class="pc-field only-determine">
+                        <label>Target ROAS</label>
+                        <div class="pc-input has-suf">
+                            <span class="affix suf">x</span>
+                            <input type="text" id="inpRoas" inputmode="decimal" autocomplete="off"
+                                class="js-dec" value="7">
+                        </div>
+                        <div class="pc-presets" data-preset-for="inpRoas">
+                            <button type="button" class="pc-preset" data-val="5">5x</button>
+                            <button type="button" class="pc-preset" data-val="6">6x</button>
+                            <button type="button" class="pc-preset" data-val="7">7x</button>
+                            <button type="button" class="pc-preset" data-val="8">8x</button>
+                            <button type="button" class="pc-preset" data-val="10">10x</button>
+                        </div>
+                    </div>
+
+                    <label class="pc-switch">
+                        <input type="checkbox" id="inpPpn" checked>
+                        <span class="pc-switch-track"><span class="pc-switch-knob"></span></span>
+                        <span class="pc-switch-label">Biaya iklan kena PPN 11%</span>
+                    </label>
+                </div>
+
+                <div>
+                    <div class="pc-card pc-sticky">
+                        <div class="pc-result-header">
+                            <div class="pc-result-title-wrap">
+                                <span class="pc-card-icon"><i class="bi bi-bullseye"></i></span>
+                                <h2 class="pc-result-title">Ringkasan keputusan</h2>
+                            </div>
+                        </div>
+                        <div id="pcWarnings"></div>
+
+                        <div class="pc-hl">
+                            <div class="lbl" id="hlLabel">Harga Jual Rekomendasi</div>
+                            <div class="val" id="hlValue">—</div>
+                            <div class="sub" id="hlSub"></div>
+                            <div class="pc-chips only-determine" id="hlChips"></div>
+                        </div>
+
+                        <div style="margin-bottom:.85rem" id="statusRow"></div>
+
+                        <div class="pc-metrics" id="pcMetrics"></div>
+
+                        <div class="pc-sub-title"><i class="bi bi-graph-up-arrow"></i> Simulasi ROAS</div>
+                        <table class="pc-table" id="roasTable">
+                            <thead>
+                                <tr><th>ROAS</th><th>Profit/order</th><th>Margin</th></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <p class="pc-cap" id="roasCap"></p>
+
+                        <button type="button" class="pc-collapse-btn" id="rangeToggle">
+                            <i class="bi bi-sliders"></i> Simulasi Range HPP
+                        </button>
+                        <div id="rangePanel" style="display:none">
+                            <div class="pc-range-inputs">
+                                <div class="pc-field" style="margin:0">
+                                    <label>HPP Minimum</label>
+                                    <div class="pc-input has-pre">
+                                        <span class="affix pre">Rp</span>
+                                        <input type="text" id="inpHppMin" inputmode="numeric" class="js-money" placeholder="43.000">
+                                    </div>
+                                </div>
+                                <div class="pc-field" style="margin:0">
+                                    <label>HPP Maximum</label>
+                                    <div class="pc-input has-pre">
+                                        <span class="affix pre">Rp</span>
+                                        <input type="text" id="inpHppMax" inputmode="numeric" class="js-money" placeholder="50.000">
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="pc-table" id="hppTable">
+                                <thead>
+                                    <tr><th>HPP</th><th>ROAS Minimum</th><th>Budget Iklan Maks</th></tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            <p style="font-size:.74rem;color:var(--muted);margin:.5rem 0 0">
+                                ROAS minimum = ROAS terkecil agar target profit tetap tercapai pada tiap level HPP.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                </section>
+
+                <section class="page-view" data-page-view="stores" hidden>
+                    <div class="store-wrap">
+                        <div class="store-head">
+                            <div>
+                                <h2>Kelola toko</h2>
+                                <p>Tambah toko baru atau edit informasi toko yang sudah tersimpan.</p>
+                            </div>
+                        </div>
+
+                        <div class="store-layout">
+                            <div class="store-card store-form-card">
+                                <div class="store-card-title">
+                                    <span class="card-icon"><i class="bi bi-shop"></i></span>
+                                    <div>
+                                        <h2 id="storeFormTitle">Tambah toko</h2>
+                                        <p id="storeFormDescription">Simpan identitas toko untuk dipakai di workspace.</p>
+                                    </div>
+                                </div>
+
+                                <form id="storeForm">
+                                    <div class="store-field">
+                                        <label for="storeName">Nama toko *</label>
+                                        <input type="text" id="storeName" placeholder="Contoh: Toko Utama" autocomplete="organization" required>
+                                    </div>
+                                    <div class="store-field">
+                                        <label for="storeUsername">Username toko</label>
+                                        <input type="text" id="storeUsername" placeholder="@namatoko" autocomplete="off">
+                                    </div>
+                                    <div class="store-field">
+                                        <label for="storeShopId">ID toko</label>
+                                        <input type="text" id="storeShopId" placeholder="Opsional" autocomplete="off">
+                                    </div>
+                                    <div class="store-field">
+                                        <label for="storeDescription">Catatan</label>
+                                        <textarea id="storeDescription" rows="3" placeholder="Contoh: Fokus produk fashion"></textarea>
+                                    </div>
+                                    <div class="store-form-actions">
+                                        <button type="button" class="store-btn" id="storeCancelBtn" hidden>Batal</button>
+                                        <button type="submit" class="store-btn primary" id="storeSubmitBtn"><i class="bi bi-plus-lg"></i> Simpan toko</button>
+                                    </div>
+                                </form>
+                                <div class="store-status" id="storeStatus" hidden></div>
+                            </div>
+
+                            <div class="store-card">
+                                <div class="store-list-head">
+                                    <div>
+                                        <h2>Daftar toko</h2>
+                                        <p>Toko aktif bisa dipilih saat import pengiriman.</p>
+                                    </div>
+                                    <span class="store-count" id="storeCount">0 toko</span>
+                                </div>
+                                <div class="store-table-wrap">
+                                    <table class="store-table">
+                                        <thead>
+                                            <tr><th>Nama toko</th><th>Username</th><th>ID toko</th><th>Status</th><th aria-label="Aksi"></th></tr>
+                                        </thead>
+                                        <tbody id="storeTableBody"></tbody>
+                                    </table>
+                                </div>
+                                <div class="store-empty" id="storeEmptyState" hidden>
+                                    <i class="bi bi-shop"></i>
+                                    Belum ada toko. Tambahkan toko pertama dari form di sebelah kiri.
+                                </div>
+                                <button type="button" class="store-btn" id="storeNewBtn" style="margin-top:.9rem"><i class="bi bi-plus-lg"></i> Tambah toko baru</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="page-view" data-page-view="shipmentImport" hidden>
+                    <div class="shipment-wrap">
+                        <div class="workspace-notice shipment-browser-only"><i class="bi bi-info-circle"></i><span>Preview ini memakai penyimpanan browser. Tombol simpan saat ini belum menulis ke database dashboard. Data contoh di dashboard berasal dari impor database terpisah.</span></div>
+                        <div class="shipment-layout">
+                            <div class="shipment-card shipment-sidebar-card">
+                                <div class="shipment-card-title">
+                                    <span class="card-icon"><i class="bi bi-shop-window"></i></span>
+                                    <div>
+                                        <h2>Sumber data</h2>
+                                        <p>Pilih toko dan file yang mau diimpor.</p>
+                                    </div>
+                                </div>
+
+                                <label class="shipment-label" for="shipmentStore">Toko tujuan</label>
+                                <select class="shipment-select" id="shipmentStore">
+                                    <option value="">Pilih toko</option>
+                                    <option value="Toko Utama">Toko Utama</option>
+                                    <option value="Toko Fashion">Toko Fashion</option>
+                                    <option value="Toko Home Living">Toko Home Living</option>
+                                </select>
+
+                                <label class="shipment-dropzone" id="shipmentDropzone" for="shipmentFiles">
+                                    <i class="bi bi-file-earmark-spreadsheet"></i>
+                                    <strong>Tarik file ke sini atau pilih file</strong>
+                                    <span>Format .xlsx atau .csv · bisa pilih beberapa file</span>
+                                </label>
+                                <input class="shipment-input" type="file" id="shipmentFiles" accept=".xlsx,.csv" multiple>
+                                <div class="shipment-file-list" id="shipmentFileList"></div>
+
+                                <div class="shipment-note">
+                                    <i class="bi bi-shield-check"></i>
+                                    <span>Baris item yang benar-benar sama dari beberapa file akan dikeluarkan. SKU berbeda pada order yang sama tetap tampil.</span>
+                                </div>
+
+                                <div class="shipment-actions">
+                                    <button type="button" class="shipment-btn" id="shipmentReset" disabled>Reset</button>
+                                    <button type="button" class="shipment-btn primary" id="shipmentPreviewBtn" disabled>
+                                        <i class="bi bi-eye"></i> Preview data
+                                    </button>
+                                </div>
+                                <div class="shipment-status" id="shipmentStatus" hidden></div>
+                            </div>
+
+                            <div class="shipment-card shipment-preview-card">
+                                <div id="shipmentEmptyState" class="shipment-preview-empty">
+                                    <div>
+                                        <i class="bi bi-table"></i>
+                                        <strong>Preview akan muncul di sini</strong>
+                                        Pilih toko dan unggah minimal satu file untuk mulai memeriksa data.
+                                    </div>
+                                </div>
+
+                                <div id="shipmentPreviewState" hidden>
+                                    <div class="shipment-preview-toolbar">
+                                        <div>
+                                            <h2>Preview data pengiriman</h2>
+                                            <p id="shipmentPreviewDescription">—</p>
+                                        </div>
+                                        <span class="shipment-pill"><i class="bi bi-check2-circle"></i>&nbsp; Belum disimpan</span>
+                                    </div>
+
+                                    <div class="shipment-summary">
+                                        <div class="shipment-stat"><div class="shipment-stat-label">Baris terbaca</div><div class="shipment-stat-value" id="shipmentTotalCount">0</div></div>
+                                        <div class="shipment-stat"><div class="shipment-stat-label">Siap diimpor</div><div class="shipment-stat-value success" id="shipmentReadyCount">0</div></div>
+                                        <div class="shipment-stat"><div class="shipment-stat-label">Duplikat</div><div class="shipment-stat-value warning" id="shipmentDuplicateCount">0</div></div>
+                                        <div class="shipment-stat"><div class="shipment-stat-label">File diproses</div><div class="shipment-stat-value" id="shipmentFileCount">0</div></div>
+                                    </div>
+
+                                    <div class="shipment-table-wrap">
+                                        <table class="shipment-table">
+                                            <thead>
+                                                <tr><th>No. Pesanan</th><th>Item</th><th>Judul Produk</th><th>Variant</th><th>Seller SKU</th><th>SKU ID</th><th>No. Resi</th><th>Kurir</th><th>Status</th><th>Total</th></tr>
+                                            </thead>
+                                            <tbody id="shipmentPreviewBody"></tbody>
+                                        </table>
+                                    </div>
+                                    <div class="shipment-preview-foot">
+                                        <span><i class="bi bi-info-circle"></i> Hanya baris unik yang akan disimpan.</span>
+                                        <button type="button" class="shipment-btn primary" id="shipmentConfirmBtn" disabled><i class="bi bi-device-ssd"></i> Simpan di browser</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

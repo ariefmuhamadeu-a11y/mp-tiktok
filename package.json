@@ -1,0 +1,21 @@
+{
+  "name": "mp-tiktok",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "server": "vite --host 0.0.0.0",
+    "dev": "vite",
+    "backend:dev": "cd backend-node && npm run dev",
+    "backend:migrate": "cd backend-node && npm run db:migrate",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^7.0.7"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
+}
