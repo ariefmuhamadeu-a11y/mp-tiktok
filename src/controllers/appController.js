@@ -21,9 +21,16 @@ import {
     readShipmentRecords,
     saveShipmentRecords
 } from '../services/shipmentService.js';
+import {
+    escapeIncomeHtml,
+    formatIncomeAmount,
+    parseIncomeFile
+} from '../services/incomeService.js';
 import { pageFromPath, pageMeta, pageRoutes } from '../models/appModel.js';
 import { renderPage } from '../views/appView.js';
-import { setupWorkspace } from './workspaceController.js';
+import { refreshWorkspace, setupWorkspace } from './workspaceController.js';
+import { renderCatalogPage, setupCatalog } from './catalogController.js';
+import { renderPromotions, setupPromotions } from './promotionController.js';
 
 (function initApp() {
     'use strict';
@@ -394,6 +401,7 @@ import { setupWorkspace } from './workspaceController.js';
     }
 
     const storeState = { editingId: null };
+    let databaseShipmentStores = null;
 
     function setStoreStatus(message, type = '') {
         const status = el('storeStatus');
@@ -405,10 +413,11 @@ import { setupWorkspace } from './workspaceController.js';
 
     function renderStoreOptions() {
         const selected = shipment.store ? shipment.store.value : '';
-        shipment.store.innerHTML = '<option value="">Pilih toko</option>' + stores.map((store) =>
+        const availableStores = databaseShipmentStores?.length ? databaseShipmentStores : stores;
+        shipment.store.innerHTML = '<option value="">Pilih toko</option>' + availableStores.map((store) =>
             '<option value="' + escapeHtml(store.name) + '">' + escapeHtml(store.name) + '</option>'
         ).join('');
-        shipment.store.value = stores.some((store) => store.name === selected) ? selected : '';
+        shipment.store.value = availableStores.some((store) => store.name === selected) ? selected : '';
     }
 
     function renderStoreList() {
@@ -547,6 +556,23 @@ import { setupWorkspace } from './workspaceController.js';
         confirmButton: el('shipmentConfirmBtn')
     };
 
+    const incomeState = { file: null, parsed: null, confirmed: false };
+    const income = {
+        store: el('incomeStore'),
+        filesInput: el('incomeFiles'),
+        dropzone: el('incomeDropzone'),
+        fileList: el('incomeFileList'),
+        previewButton: el('incomePreviewBtn'),
+        resetButton: el('incomeReset'),
+        status: el('incomeStatus'),
+        emptyState: el('incomeEmptyState'),
+        previewState: el('incomePreviewState'),
+        auditChecks: el('incomeAuditChecks'),
+        reportRows: el('incomeReportRows'),
+        previewBody: el('incomePreviewBody'),
+        confirmButton: el('incomeConfirmBtn')
+    };
+
     function setShipmentStatus(message, type) {
         shipment.status.hidden = !message;
         shipment.status.className = 'shipment-status' + (type ? ' ' + type : '');
@@ -574,6 +600,7 @@ import { setupWorkspace } from './workspaceController.js';
         shipment.previewState.hidden = true;
         shipment.emptyState.hidden = false;
         shipment.confirmButton.disabled = true;
+        shipment.confirmButton.innerHTML = '<i class="bi bi-database-check"></i> Simpan ke database';
         shipment.previewBody.innerHTML = '';
     }
 
@@ -600,7 +627,7 @@ import { setupWorkspace } from './workspaceController.js';
         'Tidak ada baris unik baru untuk diimpor.</td></tr>';
         shipment.emptyState.hidden = true;
         shipment.previewState.hidden = false;
-        shipment.confirmButton.disabled = !shipmentState.readyRows.length || shipmentState.confirmed;
+        shipment.confirmButton.disabled = !shipmentState.rows.length || shipmentState.confirmed;
     }
 
     async function buildShipmentPreview() {
@@ -695,26 +722,244 @@ import { setupWorkspace } from './workspaceController.js';
             shipment.dropzone.classList.remove('is-dragging');
             addShipmentFiles(Array.from(event.dataTransfer.files || []));
         });
-        shipment.confirmButton.addEventListener('click', () => {
-            if (!shipmentState.readyRows.length || shipmentState.confirmed) return;
-            const stored = readShipmentRecords();
-            const additions = shipmentState.readyRows.map((row) => ({
-                ...row,
-                store: shipment.store.value,
-                importedAt: new Date().toISOString()
-            }));
+        shipment.confirmButton.addEventListener('click', async () => {
+            if (!shipmentState.rows.length || shipmentState.confirmed) return;
+            const selectedStore = databaseShipmentStores?.find((store) => store.name === shipment.store.value);
+            if (!selectedStore) {
+                setShipmentStatus('Toko database belum siap. Muat ulang halaman lalu coba lagi.', 'error');
+                return;
+            }
+
+            shipment.confirmButton.disabled = true;
+            shipment.confirmButton.innerHTML = '<i class="bi bi-arrow-repeat"></i> Menyimpan...';
+            setShipmentStatus('Sedang menyimpan pesanan, resi, item, dan pencocokan transaksi ke database…');
             try {
+                const response = await fetch('/api/shipment-imports', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        storeId: selectedStore.id,
+                        fileName: shipmentState.files.map((file) => file.name).join(', '),
+                        rows: shipmentState.rows
+                    })
+                });
+                const payload = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(payload.message || 'Server tidak dapat menyimpan data pengiriman.');
+
+                const stored = readShipmentRecords();
+                const additions = shipmentState.readyRows.map((row) => ({
+                    ...row,
+                    store: shipment.store.value,
+                    importedAt: new Date().toISOString()
+                }));
                 saveShipmentRecords(stored.concat(additions));
+                const result = payload.data || {};
                 shipmentState.confirmed = true;
                 shipment.confirmButton.disabled = true;
-                shipment.confirmButton.innerHTML = '<i class="bi bi-check2"></i> Tersimpan di browser';
-                setShipmentStatus(additions.length + ' baris pengiriman tersimpan di browser untuk ' +
-                    shipment.store.value + '. Data database belum berubah.', 'success');
-            } catch (_) {
-                setShipmentStatus('Data tidak bisa disimpan di browser. Coba hapus sebagian data lama lalu ulangi.', 'error');
+                shipment.confirmButton.innerHTML = '<i class="bi bi-check2"></i> Tersimpan ke database';
+                setShipmentStatus(
+                    (result.importedCount || shipmentState.rows.length) + ' baris tersimpan untuk ' + shipment.store.value + '. ' +
+                    (result.createdOrderCount || 0) + ' pesanan baru dan ' +
+                    (result.linkedTransactionCount || 0) + ' transaksi keuangan dicocokkan.',
+                    'success'
+                );
+            } catch (error) {
+                shipment.confirmButton.disabled = false;
+                shipment.confirmButton.innerHTML = '<i class="bi bi-database-check"></i> Simpan ke database';
+                setShipmentStatus(error.message || 'Data pengiriman tidak bisa disimpan. Coba lagi.', 'error');
             }
         });
         renderShipmentFiles();
+        loadDatabaseShipmentStore();
+    }
+
+    function setIncomeStatus(message, type = '') {
+        income.status.hidden = !message;
+        income.status.className = 'income-status' + (type ? ' ' + type : '');
+        income.status.textContent = message || '';
+    }
+
+    function renderIncomeStores(stores = databaseShipmentStores || []) {
+        const selected = income.store?.value || '';
+        income.store.innerHTML = '<option value="">Pilih toko</option>' + stores.map((store) =>
+            '<option value="' + escapeIncomeHtml(store.id) + '">' + escapeIncomeHtml(store.name) + '</option>'
+        ).join('');
+        income.store.value = stores.some((store) => String(store.id) === String(selected)) ? selected : (stores[0] ? String(stores[0].id) : '');
+    }
+
+    function renderIncomeFile() {
+        income.fileList.innerHTML = incomeState.file
+            ? '<div class="income-file"><i class="bi bi-file-earmark-check"></i><span title="' + escapeIncomeHtml(incomeState.file.name) + '">' + escapeIncomeHtml(incomeState.file.name) + '</span><button type="button" id="incomeRemoveFile" aria-label="Hapus file"><i class="bi bi-x-lg"></i></button></div>'
+            : '';
+        income.previewButton.disabled = !income.store.value || !incomeState.file;
+        income.resetButton.disabled = !incomeState.file && !incomeState.parsed;
+    }
+
+    function resetIncomePreview() {
+        incomeState.parsed = null;
+        incomeState.confirmed = false;
+        income.emptyState.hidden = false;
+        income.previewState.hidden = true;
+        income.confirmButton.disabled = true;
+        income.confirmButton.innerHTML = '<i class="bi bi-database-check"></i> Import ke database';
+        income.auditChecks.innerHTML = '';
+        income.reportRows.innerHTML = '';
+        income.previewBody.innerHTML = '';
+    }
+
+    function renderIncomePreview() {
+        const parsed = incomeState.parsed;
+        const audit = parsed.audit;
+        const number = (value) => Number(value || 0).toLocaleString('id-ID');
+        el('incomePreviewDescription').textContent = parsed.fileName + ' · ' + number(audit.detailRows) + ' baris detail · ' + number(audit.withdrawalRows) + ' transfer';
+        el('incomeDetailCount').textContent = number(audit.detailRows);
+        el('incomeOrderCount').textContent = number(audit.orderRows);
+        el('incomeAdjustmentCount').textContent = number(audit.adjustmentRows);
+        el('incomeDuplicateCount').textContent = number(audit.duplicateRows);
+        el('incomeErrorCount').textContent = number(audit.invalidRows);
+        income.auditChecks.innerHTML = audit.checks.map((check) =>
+            '<div class="income-check ' + check.status + '"><i class="bi ' + (check.status === 'ok' ? 'bi-check-circle-fill' : check.status === 'warning' ? 'bi-exclamation-triangle-fill' : 'bi-x-circle-fill') + '"></i><span><strong>' + escapeIncomeHtml(check.label) + '</strong><small>' + escapeIncomeHtml(check.detail) + '</small></span></div>'
+        ).join('');
+        const reportEntries = Object.entries(audit.report || {}).filter(([key]) => [
+            'Periode', 'Zona waktu', 'Mata uang', 'Jumlah penyelesaian pembayaran', 'Total Pendapatan', 'Total Biaya',
+            'Total pengembalian dana setelah diskon', 'Biaya komisi platform', 'Biaya layanan logistik', 'Ongkir'
+        ].includes(key));
+        income.reportRows.innerHTML = reportEntries.map(([label, value]) =>
+            '<div><span>' + escapeIncomeHtml(label) + '</span><strong>' + (label === 'Periode' || label === 'Zona waktu' || label === 'Mata uang' ? escapeIncomeHtml(value) : formatIncomeAmount(value)) + '</strong></div>'
+        ).join('') || '<div><span>Ringkasan</span><strong>Tidak tersedia</strong></div>';
+        income.previewBody.innerHTML = parsed.previewRows.map(({ row, sourceRow }) =>
+            '<tr><td class="muted">' + number(sourceRow) + '</td><td>' + escapeIncomeHtml(row['ID Pesanan/Penyesuaian']) + '</td><td>' + escapeIncomeHtml(row['Jenis transaksi']) + '</td><td>' + escapeIncomeHtml(row['Waktu pemesanan']) + '</td><td>' + escapeIncomeHtml(row['Waktu pembayaran pesanan']) + '</td><td class="numeric">' + formatIncomeAmount(row['Jumlah penyelesaian pembayaran']) + '</td><td class="numeric">' + formatIncomeAmount(row['Total Pendapatan']) + '</td><td class="numeric">' + formatIncomeAmount(row['Total Biaya']) + '</td></tr>'
+        ).join('') || '<tr><td colspan="8" class="muted" style="text-align:center;padding:2rem">Tidak ada transaksi yang dapat ditampilkan.</td></tr>';
+        income.emptyState.hidden = true;
+        income.previewState.hidden = false;
+        income.confirmButton.disabled = !audit.ready || incomeState.confirmed;
+    }
+
+    async function buildIncomePreview() {
+        if (!income.store.value) {
+            setIncomeStatus('Pilih toko tujuan terlebih dahulu.', 'error');
+            return;
+        }
+        if (!incomeState.file) {
+            setIncomeStatus('Pilih satu file laporan income XLSX.', 'error');
+            return;
+        }
+        income.previewButton.disabled = true;
+        income.previewButton.innerHTML = '<i class="bi bi-arrow-repeat"></i> Memeriksa...';
+        setIncomeStatus('Sedang membaca sheet dan menjalankan audit rekonsiliasi…');
+        resetIncomePreview();
+        try {
+            incomeState.parsed = await parseIncomeFile(incomeState.file);
+            renderIncomePreview();
+            const warningCount = incomeState.parsed.audit.checks.filter((check) => check.status !== 'ok').length;
+            setIncomeStatus(warningCount ? 'Audit selesai dengan ' + warningCount + ' catatan. Tinjau checklist sebelum import.' : 'Audit selesai. File siap diimpor.', warningCount ? '' : 'success');
+        } catch (error) {
+            resetIncomePreview();
+            setIncomeStatus('File tidak bisa dibaca: ' + (error.message || 'format tidak sesuai.'), 'error');
+        } finally {
+            income.previewButton.disabled = !income.store.value || !incomeState.file;
+            income.previewButton.innerHTML = '<i class="bi bi-search"></i> Cek &amp; audit';
+            renderIncomeFile();
+        }
+    }
+
+    function addIncomeFile(file) {
+        if (!file) return;
+        if (!/\.xlsx$/i.test(file.name)) {
+            setIncomeStatus('Hanya file XLSX yang diterima.', 'error');
+            return;
+        }
+        incomeState.file = file;
+        resetIncomePreview();
+        setIncomeStatus('');
+        renderIncomeFile();
+    }
+
+    function setupIncomeEvents() {
+        income.filesInput.addEventListener('change', (event) => {
+            addIncomeFile(event.target.files?.[0]);
+            event.target.value = '';
+        });
+        income.fileList.addEventListener('click', (event) => {
+            if (!event.target.closest('#incomeRemoveFile')) return;
+            incomeState.file = null;
+            resetIncomePreview();
+            renderIncomeFile();
+        });
+        income.store.addEventListener('change', () => {
+            resetIncomePreview();
+            renderIncomeFile();
+        });
+        income.previewButton.addEventListener('click', buildIncomePreview);
+        income.resetButton.addEventListener('click', () => {
+            incomeState.file = null;
+            resetIncomePreview();
+            setIncomeStatus('');
+            renderIncomeFile();
+        });
+        income.dropzone.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            income.dropzone.classList.add('is-dragging');
+        });
+        income.dropzone.addEventListener('dragleave', () => income.dropzone.classList.remove('is-dragging'));
+        income.dropzone.addEventListener('drop', (event) => {
+            event.preventDefault();
+            income.dropzone.classList.remove('is-dragging');
+            addIncomeFile(Array.from(event.dataTransfer.files || [])[0]);
+        });
+        income.confirmButton.addEventListener('click', async () => {
+            if (!incomeState.parsed || !incomeState.parsed.audit.ready || incomeState.confirmed) return;
+            income.confirmButton.disabled = true;
+            income.confirmButton.innerHTML = '<i class="bi bi-arrow-repeat"></i> Menyimpan...';
+            setIncomeStatus('Sedang menyimpan transaksi keuangan dan catatan audit…');
+            try {
+                const response = await fetch('/api/income-imports', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        storeId: Number(income.store.value),
+                        fileName: incomeState.parsed.fileName,
+                        details: incomeState.parsed.details,
+                        withdrawals: incomeState.parsed.withdrawals,
+                        report: incomeState.parsed.report
+                    })
+                });
+                const payload = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(payload.message || 'Server tidak dapat menyimpan laporan keuangan.');
+                const result = payload.data || {};
+                incomeState.confirmed = true;
+                income.confirmButton.innerHTML = '<i class="bi bi-check2"></i> Tersimpan ke database';
+                setIncomeStatus(result.status === 'already_imported' ? 'File yang sama sudah tercatat sebelumnya.' : (result.importedCount || 0) + ' baris keuangan tersimpan. ' + (result.duplicateCount || 0) + ' duplikat dicatat sebagai review.', 'success');
+                await refreshWorkspace(Number(income.store.value));
+            } catch (error) {
+                income.confirmButton.disabled = false;
+                income.confirmButton.innerHTML = '<i class="bi bi-database-check"></i> Import ke database';
+                setIncomeStatus(error.message || 'Laporan keuangan tidak bisa disimpan.', 'error');
+            }
+        });
+        renderIncomeFile();
+        renderIncomeStores();
+    }
+
+    async function loadDatabaseShipmentStore() {
+        if (!shipment.store) return;
+        shipment.store.disabled = true;
+        shipment.store.innerHTML = '<option value="">Memuat toko database…</option>';
+        try {
+            const response = await fetch('/api/workspace');
+            const data = await response.json();
+            if (!response.ok || !Array.isArray(data.stores) || !data.stores.length) throw new Error('Toko database belum tersedia.');
+            databaseShipmentStores = data.stores.map((store) => ({ id: store.id, name: store.name }));
+            renderStoreOptions();
+            renderIncomeStores(databaseShipmentStores);
+            shipment.store.value = databaseShipmentStores[0].name;
+        } catch (_) {
+            databaseShipmentStores = null;
+            renderStoreOptions();
+        } finally {
+            shipment.store.disabled = false;
+            renderShipmentFiles();
+        }
     }
 
     function setupTheme() {
@@ -749,8 +994,14 @@ import { setupWorkspace } from './workspaceController.js';
                 meta: pageMeta[page] || pageMeta.dashboard
             });
             if (page === 'pricing') renderPricing();
+            if (page === 'incomeImport') renderIncomeFile();
             if (page === 'shipmentImport') renderShipmentFiles();
             if (page === 'stores') renderStoreList();
+            if (['products', 'variants', 'orderMapping'].includes(page)) renderCatalogPage(page);
+            if (page === 'promotions') renderPromotions();
+            if (page === 'finance' && document.querySelector('#financeKpis')?.innerHTML) {
+                refreshWorkspace();
+            }
             closeSidebar();
         }
 
@@ -773,14 +1024,21 @@ import { setupWorkspace } from './workspaceController.js';
             });
         });
         window.addEventListener('popstate', () => showPage(pageFromPath(window.location.pathname)));
-        showPage(pageFromPath(window.location.pathname));
+        const initialPage = pageFromPath(window.location.pathname);
+        if (initialPage === 'finance' && window.location.pathname.replace(/\/$/, '') === '/keuangan') {
+            history.replaceState({}, '', pageRoutes.finance);
+        }
+        showPage(initialPage);
     }
 
     bindCostEditor('marketplace');
     bindCostEditor('custom');
     setupPricingEvents();
     setupShipmentEvents();
+    setupIncomeEvents();
     setupStoreEvents();
+    setupCatalog();
+    setupPromotions();
     setupTheme();
     setupWorkspace();
     renderPricing();

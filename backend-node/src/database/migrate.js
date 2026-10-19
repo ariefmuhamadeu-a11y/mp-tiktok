@@ -1,4 +1,8 @@
+import { DatabaseSync } from 'node:sqlite';
+import { existsSync } from 'node:fs';
 import { db, databasePath } from './connection.js';
+import { commerceDatabasePath } from '../services/workspaceService.js';
+import { ensureCatalogSchema } from './catalogSchema.js';
 
 db.exec(`
     CREATE TABLE IF NOT EXISTS users (
@@ -23,5 +27,14 @@ db.exec(`
         UNIQUE (user_id, slug)
     );
 `);
+
+ensureCatalogSchema(db);
+
+if (existsSync(commerceDatabasePath) && commerceDatabasePath !== databasePath) {
+    const commerceDatabase = new DatabaseSync(commerceDatabasePath);
+    commerceDatabase.exec('PRAGMA foreign_keys = ON;');
+    ensureCatalogSchema(commerceDatabase);
+    commerceDatabase.close();
+}
 
 console.log('Database migrated:', databasePath);

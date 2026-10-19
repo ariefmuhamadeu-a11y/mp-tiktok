@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Dashboard pesanan, pengiriman, keuangan, dan kalkulator harga jual TikTok Shop.">
+    <meta name="description" content="Dashboard pesanan, pengiriman, transaksi, dan kalkulator harga jual TikTok Shop.">
     <title>MP-TikTok Workspace</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <style>
@@ -336,6 +336,149 @@
             color: var(--text);
             font-size: .92rem;
             font-weight: 800;
+        }
+
+        .dashboard-module-section {
+            margin-top: 1rem;
+            padding: 1.1rem;
+            border: 1px solid rgba(148, 163, 184, .24);
+            border-radius: 16px;
+            background: var(--card);
+            box-shadow: 0 8px 22px rgba(15, 23, 42, .04);
+        }
+
+        .dashboard-module-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: .9rem;
+        }
+
+        .dashboard-module-head h2 {
+            margin: 0;
+            color: var(--text);
+            font-size: .98rem;
+        }
+
+        .dashboard-module-head p {
+            margin: .25rem 0 0;
+            color: var(--muted);
+            font-size: .75rem;
+        }
+
+        .dashboard-module-count {
+            display: inline-flex;
+            align-items: center;
+            gap: .35rem;
+            color: var(--muted);
+            font-size: .7rem;
+            font-weight: 750;
+            white-space: nowrap;
+        }
+
+        .dashboard-module-count i { color: #16a34a; font-size: .58rem; }
+
+        .dashboard-module-groups {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: .75rem;
+        }
+
+        .dashboard-module-group {
+            min-width: 0;
+            padding: .85rem;
+            border: 1px solid rgba(148, 163, 184, .2);
+            border-radius: 13px;
+            background: var(--card-soft);
+        }
+
+        .dashboard-module-group-head {
+            display: flex;
+            align-items: center;
+            gap: .45rem;
+            margin-bottom: .65rem;
+            color: var(--text);
+            font-size: .75rem;
+            font-weight: 800;
+        }
+
+        .dashboard-module-group-head i { color: var(--accent); font-size: .9rem; }
+
+        .dashboard-module-list {
+            display: grid;
+            gap: .45rem;
+        }
+
+        .dashboard-module-card {
+            display: flex;
+            align-items: flex-start;
+            gap: .6rem;
+            width: 100%;
+            border: 1px solid rgba(148, 163, 184, .18);
+            border-radius: 10px;
+            padding: .65rem;
+            color: var(--text);
+            background: var(--card);
+            text-align: left;
+            cursor: pointer;
+            transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+        }
+
+        .dashboard-module-card:hover,
+        .dashboard-module-card:focus-visible {
+            border-color: rgba(37, 99, 235, .45);
+            box-shadow: 0 5px 14px rgba(37, 99, 235, .1);
+            transform: translateY(-1px);
+            outline: none;
+        }
+
+        .dashboard-module-icon {
+            display: grid;
+            width: 28px;
+            height: 28px;
+            flex: 0 0 auto;
+            place-items: center;
+            border-radius: 8px;
+            color: var(--accent);
+            background: var(--accent-soft);
+            font-size: .8rem;
+        }
+
+        .dashboard-module-copy { min-width: 0; flex: 1; }
+
+        .dashboard-module-copy strong {
+            display: block;
+            overflow: hidden;
+            font-size: .75rem;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .dashboard-module-copy small {
+            display: block;
+            margin-top: .15rem;
+            color: var(--muted);
+            font-size: .67rem;
+            line-height: 1.35;
+        }
+
+        .dashboard-module-status {
+            display: inline-flex;
+            flex: 0 0 auto;
+            margin-top: .05rem;
+            border-radius: 999px;
+            padding: .16rem .38rem;
+            color: #166534;
+            background: #dcfce7;
+            font-size: .59rem;
+            font-weight: 800;
+        }
+
+        body[data-theme="dark"] .dashboard-module-status { color: #bbf7d0; background: #14532d; }
+
+        @media (max-width: 1100px) {
+            .dashboard-module-groups { grid-template-columns: 1fr 1fr; }
         }
 
         @media (max-width: 820px) {
@@ -1736,20 +1879,158 @@
             .shipment-preview-toolbar { align-items: flex-start; flex-direction: column; gap: .2rem; }
         }
 
+        /* Finance import and audit */
+        .income-wrap { max-width: 1280px; margin: 0 auto; padding: 1rem 1.5rem 4rem; }
+        .income-hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; padding: 1.15rem 1.25rem; border: 1px solid rgba(37, 99, 235, .16); border-radius: 18px; background: linear-gradient(135deg, var(--card), var(--accent-soft)); }
+        .income-hero h2 { margin: 0; color: var(--text); font-size: 1.12rem; letter-spacing: -.03em; }
+        .income-hero p { max-width: 680px; margin: .35rem 0 0; color: var(--muted); font-size: .78rem; }
+        .income-layout { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 1rem; align-items: start; }
+        .income-card { min-width: 0; padding: 1.15rem; border: 1px solid rgba(148, 163, 184, .28); border-radius: 18px; background: var(--card); box-shadow: 0 10px 24px rgba(15, 23, 42, .06), 0 0 0 1px rgba(15, 23, 42, .03); }
+        .income-card-title { display: flex; align-items: flex-start; gap: .7rem; margin-bottom: 1rem; }
+        .income-card-title .card-icon { display: grid; width: 34px; height: 34px; flex: 0 0 auto; place-items: center; border-radius: 10px; color: var(--accent); background: var(--accent-soft); }
+        .income-card-title h2 { margin: 0; color: var(--text); font-size: .95rem; }
+        .income-card-title p { margin: .2rem 0 0; color: var(--muted); font-size: .74rem; }
+        .income-label { display: block; margin-bottom: .4rem; color: var(--text); font-size: .76rem; font-weight: 750; }
+        .income-select { width: 100%; border: 1px solid rgba(148, 163, 184, .45); border-radius: 10px; padding: .65rem .75rem; color: var(--text); background: var(--card); outline: none; }
+        .income-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+        .income-dropzone { display: flex; min-height: 170px; flex-direction: column; align-items: center; justify-content: center; gap: .55rem; margin-top: 1rem; border: 1.5px dashed rgba(37, 99, 235, .45); border-radius: 14px; padding: 1rem; color: var(--muted); background: var(--accent-soft); text-align: center; cursor: pointer; transition: .15s ease; }
+        .income-dropzone:hover, .income-dropzone.is-dragging { border-color: var(--accent); background: rgba(37, 99, 235, .16); transform: translateY(-1px); }
+        .income-dropzone i { color: var(--accent); font-size: 1.8rem; }
+        .income-dropzone strong { color: var(--text); font-size: .82rem; }
+        .income-dropzone span { font-size: .72rem; }
+        .income-input { display: none; }
+        .income-file { display: flex; align-items: center; gap: .5rem; margin-top: .75rem; border: 1px solid rgba(148, 163, 184, .2); border-radius: 10px; padding: .55rem .65rem; color: var(--text); background: var(--card-soft); font-size: .72rem; }
+        .income-file i { color: #16a34a; }
+        .income-file span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .income-file button { margin-left: auto; border: 0; padding: .2rem; color: var(--muted); background: transparent; cursor: pointer; }
+        .income-file button:hover { color: #dc2626; }
+        .income-note { display: flex; gap: .45rem; margin-top: 1rem; color: var(--muted); font-size: .7rem; line-height: 1.5; }
+        .income-note i { color: var(--accent); }
+        .income-actions { display: flex; justify-content: flex-end; gap: .6rem; margin-top: 1rem; }
+        .income-btn { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; min-height: 36px; border: 1px solid rgba(148, 163, 184, .35); border-radius: 10px; padding: .55rem .8rem; color: var(--muted); background: var(--card); font-size: .76rem; font-weight: 750; cursor: pointer; }
+        .income-btn.primary { border-color: var(--accent); color: #fff; background: var(--accent); box-shadow: 0 7px 16px rgba(37, 99, 235, .2); }
+        .income-btn:disabled { cursor: not-allowed; opacity: .5; box-shadow: none; }
+        .income-status { margin-top: .7rem; border-radius: 10px; padding: .6rem .7rem; color: var(--muted); background: var(--card-soft); font-size: .72rem; }
+        .income-status.success { color: #15803d; background: rgba(34, 197, 94, .1); }
+        .income-status.error { color: #b91c1c; background: rgba(239, 68, 68, .1); }
+        .income-empty { display: grid; min-height: 410px; place-items: center; border: 1px dashed rgba(148, 163, 184, .38); border-radius: 14px; padding: 2rem; color: var(--muted); background: var(--card-soft); text-align: center; }
+        .income-empty i { display: block; margin-bottom: .65rem; color: #94a3b8; font-size: 2.2rem; }
+        .income-empty strong { display: block; margin-bottom: .25rem; color: var(--text); font-size: .85rem; }
+        .income-preview-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: .9rem; }
+        .income-preview-head h2 { margin: 0; color: var(--text); font-size: .98rem; }
+        .income-preview-head p { margin: .2rem 0 0; color: var(--muted); font-size: .72rem; }
+        .income-pill { display: inline-flex; align-items: center; gap: .3rem; border-radius: 999px; padding: .25rem .5rem; color: #166534; background: rgba(34, 197, 94, .12); font-size: .65rem; font-weight: 800; white-space: nowrap; }
+        .income-summary { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .6rem; margin-bottom: .9rem; }
+        .income-stat { border: 1px solid rgba(148, 163, 184, .2); border-radius: 12px; padding: .7rem; background: var(--card-soft); }
+        .income-stat-label { color: var(--muted); font-size: .66rem; font-weight: 700; }
+        .income-stat-value { margin-top: .2rem; color: var(--text); font-size: 1.05rem; font-weight: 850; }
+        .income-stat-value.warning { color: #d97706; }
+        .income-stat-value.danger { color: #dc2626; }
+        .income-section-title { display: flex; align-items: center; justify-content: space-between; gap: .8rem; margin: 1rem 0 .55rem; color: var(--text); font-size: .78rem; font-weight: 800; }
+        .income-section-title small { color: var(--muted); font-size: .67rem; font-weight: 650; }
+        .income-check-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
+        .income-check { display: flex; align-items: flex-start; gap: .55rem; border: 1px solid rgba(148, 163, 184, .2); border-radius: 11px; padding: .65rem; background: var(--card-soft); }
+        .income-check i { margin-top: .05rem; color: #16a34a; }
+        .income-check.warning i { color: #d97706; }
+        .income-check.error i { color: #dc2626; }
+        .income-check strong { display: block; color: var(--text); font-size: .71rem; }
+        .income-check small { display: block; margin-top: .14rem; color: var(--muted); font-size: .66rem; line-height: 1.35; }
+        .income-report { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .45rem; }
+        .income-report div { display: flex; align-items: center; justify-content: space-between; gap: .5rem; border-bottom: 1px solid rgba(148, 163, 184, .16); padding: .48rem 0; }
+        .income-report span { color: var(--muted); font-size: .67rem; }
+        .income-report strong { color: var(--text); font-size: .7rem; text-align: right; }
+        .income-table-wrap { overflow: auto; max-height: 430px; border: 1px solid rgba(148, 163, 184, .22); border-radius: 12px; }
+        .income-table { width: 100%; min-width: 820px; border-collapse: collapse; font-size: .72rem; }
+        .income-table th { position: sticky; top: 0; z-index: 1; padding: .65rem .7rem; color: var(--muted); background: var(--card-soft); font-size: .65rem; font-weight: 800; text-align: left; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
+        .income-table td { padding: .62rem .7rem; color: var(--text); border-top: 1px solid rgba(148, 163, 184, .14); white-space: nowrap; }
+        .income-table td.numeric { text-align: right; font-variant-numeric: tabular-nums; }
+        .income-table td.muted { color: var(--muted); }
+        .income-preview-foot { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: .75rem; color: var(--muted); font-size: .7rem; }
+        .income-preview-foot i { color: #16a34a; }
+        @media (max-width: 1100px) { .income-summary { grid-template-columns: repeat(3, minmax(0, 1fr)); } .income-report { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 1040px) { .income-layout { grid-template-columns: 1fr; } .income-source-card { order: 1; } .income-preview-card { order: 0; } }
+        @media (max-width: 640px) { .income-wrap { padding-inline: 1rem; } .income-hero { align-items: flex-start; flex-direction: column; } .income-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } .income-check-grid, .income-report { grid-template-columns: 1fr; } .income-preview-head, .income-preview-foot { align-items: flex-start; flex-direction: column; } }
+
         .app-sidebar { overflow-y: auto; }
         .app-nav-label:not(:first-child) { margin-top: 1.4rem; }
         .app-nav a.active { box-shadow: inset 3px 0 var(--accent); }
         .app-sidebar-footer strong { display: block; margin-bottom: .2rem; color: var(--text); font-size: .78rem; }
         .app-menu-toggle { display: none; border: 0; background: transparent; color: var(--text); font-size: 1.2rem; cursor: pointer; }
         .app-sidebar-backdrop { display: none; }
+        .catalog-wrap { max-width: 1180px; margin: 0 auto; padding: 1.25rem 1.5rem 4rem; }
+        .catalog-hero { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; border: 1px solid rgba(37, 99, 235, .16); border-radius: 18px; padding: 1.15rem 1.25rem; background: linear-gradient(135deg, var(--card), var(--accent-soft)); }
+        .catalog-hero h2 { margin: 0; color: var(--text); font-size: 1.1rem; letter-spacing: -.02em; }
+        .catalog-hero p { max-width: 720px; margin: .35rem 0 0; color: var(--muted); font-size: .78rem; }
+        .catalog-badge { display: inline-flex; align-items: center; gap: .35rem; flex: 0 0 auto; border: 1px solid rgba(245, 158, 11, .25); border-radius: 999px; padding: .4rem .65rem; color: #b45309; background: rgba(245, 158, 11, .1); font-size: .7rem; font-weight: 750; white-space: nowrap; }
+        .catalog-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+        .catalog-card { min-width: 0; border: 1px solid rgba(148, 163, 184, .28); border-radius: 16px; padding: 1.1rem; background: var(--card); box-shadow: 0 8px 20px rgba(15, 23, 42, .04); }
+        .catalog-card-icon { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 11px; color: var(--accent); background: var(--accent-soft); font-size: 1.05rem; }
+        .catalog-card h3 { margin: .8rem 0 .3rem; color: var(--text); font-size: .95rem; }
+        .catalog-card p { min-height: 3.25rem; margin: 0; color: var(--muted); font-size: .75rem; line-height: 1.55; }
+        .catalog-card .workspace-link { margin-top: 1rem; }
+        .catalog-audit { margin-top: 1rem; border: 1px solid rgba(148, 163, 184, .28); border-radius: 16px; padding: 1.1rem; background: var(--card); }
+        .catalog-audit-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: .85rem; }
+        .catalog-audit h3 { margin: 0; color: var(--text); font-size: .95rem; }
+        .catalog-audit p { margin: .25rem 0 0; color: var(--muted); font-size: .75rem; }
+        .catalog-checks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
+        .catalog-check { display: flex; align-items: flex-start; gap: .55rem; border: 1px solid rgba(148, 163, 184, .18); border-radius: 11px; padding: .75rem; color: var(--muted); background: var(--card-soft); font-size: .75rem; line-height: 1.45; }
+        .catalog-check i { margin-top: .05rem; color: #d97706; }
+        .catalog-check strong { display: block; margin-bottom: .12rem; color: var(--text); font-size: .76rem; }
+        .catalog-layout { display: grid; grid-template-columns: minmax(280px, 340px) minmax(0, 1fr); align-items: start; gap: 1rem; }
+        .catalog-card-title, .catalog-list-head { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; margin-bottom: 1rem; }
+        .catalog-card-title { justify-content: flex-start; }
+        .catalog-card-title h2, .catalog-list-head h2 { margin: 0; color: var(--text); font-size: .95rem; }
+        .catalog-card-title p, .catalog-list-head p { margin: .2rem 0 0; color: var(--muted); font-size: .72rem; }
+        .catalog-form-card { padding: 1.1rem; }
+        .catalog-field { margin-bottom: .75rem; }
+        .catalog-field label { display: block; margin-bottom: .35rem; color: var(--text); font-size: .74rem; font-weight: 750; }
+        .catalog-input, .catalog-select { width: 100%; min-width: 0; border: 1px solid rgba(148, 163, 184, .4); border-radius: 9px; padding: .58rem .65rem; color: var(--text); background: var(--card); font: inherit; font-size: .76rem; outline: none; }
+        .catalog-input:focus, .catalog-select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+        .catalog-check-input { display: flex; align-items: center; gap: .45rem; margin: .75rem 0; color: var(--muted); font-size: .75rem; }
+        .catalog-check-input input { accent-color: var(--accent); }
+        .catalog-form-actions { display: flex; justify-content: flex-end; gap: .5rem; margin-top: .9rem; }
+        .catalog-btn { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; min-height: 34px; border: 1px solid rgba(148, 163, 184, .35); border-radius: 9px; padding: .5rem .7rem; color: var(--muted); background: var(--card); font-size: .74rem; font-weight: 750; cursor: pointer; }
+        .catalog-btn.primary { border-color: var(--accent); color: #fff; background: var(--accent); }
+        .catalog-btn.small { min-height: 30px; padding: .35rem .55rem; font-size: .68rem; }
+        .catalog-btn:disabled { cursor: not-allowed; opacity: .55; }
+        .catalog-status { margin-top: .75rem; border-radius: 9px; padding: .6rem .7rem; color: var(--muted); background: var(--card-soft); font-size: .72rem; line-height: 1.4; }
+        .catalog-status.success { color: #15803d; background: rgba(34, 197, 94, .1); }
+        .catalog-status.error { color: #b91c1c; background: rgba(239, 68, 68, .1); }
+        .catalog-table-wrap { overflow-x: auto; }
+        .catalog-table { width: 100%; min-width: 740px; border-collapse: collapse; color: var(--text); font-size: .74rem; }
+        .catalog-table th { padding: .65rem .75rem; color: var(--muted); background: var(--card-soft); font-size: .65rem; font-weight: 800; text-align: left; text-transform: uppercase; letter-spacing: .035em; white-space: nowrap; }
+        .catalog-table td { padding: .7rem .75rem; border-top: 1px solid rgba(148, 163, 184, .14); vertical-align: top; }
+        .catalog-muted { display: block; margin-top: .15rem; color: var(--muted); font-size: .69rem; }
+        .catalog-actions { display: flex; gap: .45rem; white-space: nowrap; }
+        .catalog-link { border: 0; padding: .25rem; color: var(--accent); background: transparent; font-size: .7rem; font-weight: 750; cursor: pointer; }
+        .catalog-empty { display: grid; place-items: center; gap: .2rem; min-height: 160px; padding: 1rem; color: var(--muted); text-align: center; font-size: .74rem; }
+        .catalog-empty i { color: var(--accent); font-size: 1.5rem; }
+        .catalog-empty strong { color: var(--text); font-size: .82rem; }
+        .catalog-list-tools { display: flex; align-items: center; gap: .55rem; min-width: 0; }
+        .catalog-list-tools .catalog-select { width: min(240px, 36vw); }
+        .catalog-toolbar { display: grid; grid-template-columns: minmax(0, 1fr) minmax(180px, 240px) minmax(180px, 220px) auto; align-items: center; gap: .7rem; margin-bottom: .9rem; }
+        .catalog-toolbar > div { display: grid; gap: .15rem; }
+        .mapping-table { min-width: 980px; }
+        .mapping-backfill-card { border: 1px solid rgba(91, 102, 126, .22); }
+        .catalog-backfill-summary { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+        .catalog-backfill-summary span { padding: 8px 12px; border-radius: 10px; background: var(--workspace-surface-muted, #f5f7fb); color: var(--workspace-text-muted, #687386); font-size: 12px; }
+        .catalog-backfill-summary strong { color: var(--workspace-text, #1c2430); margin-right: 4px; }
+        .mapping-audit-table { min-width: 920px; }
+        .mapping-audit-table code { display: block; max-width: 360px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .mapping-action { display: grid; grid-template-columns: minmax(160px, 1fr) minmax(160px, 1fr) auto; align-items: center; gap: .4rem; min-width: 480px; }
+        .catalog-product-cell { min-width: 280px; max-width: 420px; white-space: normal; }
+        .catalog-card code { color: var(--muted); font-size: .68rem; }
+        @media (max-width: 900px) { .catalog-grid { grid-template-columns: 1fr; } .catalog-card p { min-height: auto; } }
+        @media (max-width: 900px) { .catalog-layout { grid-template-columns: 1fr; } .catalog-form-card { order: 1; } .catalog-toolbar { grid-template-columns: 1fr 1fr; } .catalog-toolbar > div { grid-column: 1 / -1; } }
+        @media (max-width: 640px) { .catalog-wrap { padding-inline: 1rem; } .catalog-hero, .catalog-audit-head { flex-direction: column; } .catalog-checks { grid-template-columns: 1fr; } .catalog-toolbar { grid-template-columns: 1fr; } .catalog-toolbar > div { grid-column: auto; } .catalog-list-head { align-items: flex-start; flex-direction: column; } .catalog-list-tools { width: 100%; } .catalog-list-tools .catalog-select { width: 100%; } .mapping-action { grid-template-columns: 1fr; min-width: 240px; } }
         .workspace-wrap { max-width: 1320px; margin: 0 auto; padding: 1rem 1.5rem 4rem; }
-        .workspace-toolbar { display: flex; align-items: center; justify-content: space-between; gap: .8rem; margin-bottom: 1rem; }
+        .workspace-toolbar { display: grid; grid-template-columns: minmax(0, 1fr) minmax(190px, 260px) minmax(240px, 320px); align-items: center; gap: .8rem; margin-bottom: 1rem; }
         .workspace-kicker { color: var(--muted); font-size: .78rem; }
-        .workspace-filter { min-width: 190px; max-width: 260px; border: 1px solid rgba(148, 163, 184, .35); border-radius: 10px; padding: .55rem .7rem; background: var(--card); color: var(--text); font: inherit; }
+        .workspace-filter { width: 100%; min-width: 0; max-width: none; border: 1px solid rgba(148, 163, 184, .35); border-radius: 10px; padding: .55rem .7rem; background: var(--card); color: var(--text); font: inherit; }
         .workspace-notice { display: flex; align-items: flex-start; gap: .55rem; border: 1px solid rgba(59, 130, 246, .2); border-radius: 12px; padding: .75rem .9rem; background: var(--accent-soft); color: var(--text); font-size: .78rem; line-height: 1.5; }
         .workspace-notice i { color: var(--accent); }
         .workspace-notice.error { border-color: rgba(220, 38, 38, .25); background: rgba(220, 38, 38, .07); }
-        .workspace-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .85rem; margin: 1rem 0; }
+        .workspace-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: .85rem; margin: 1rem 0; }
         .workspace-kpi, .workspace-panel { border: 1px solid rgba(148, 163, 184, .24); border-radius: 16px; background: var(--card); box-shadow: 0 8px 22px rgba(15, 23, 42, .04); }
         .workspace-kpi { padding: 1rem 1.1rem; }
         .workspace-kpi .label { display: flex; justify-content: space-between; gap: .4rem; color: var(--muted); font-size: .74rem; font-weight: 650; }
@@ -1782,9 +2063,254 @@
         .workspace-action-list small { display: block; margin-top: .15rem; color: var(--muted); }
         .workspace-action-list > div { border: 1px solid rgba(148, 163, 184, .22); border-radius: 11px; padding: .8rem; background: var(--card-soft); }
         .workspace-stack { display: grid; gap: .9rem; }
-        .workspace-search { width: 100%; max-width: 280px; border: 1px solid rgba(148, 163, 184, .35); border-radius: 9px; padding: .5rem .7rem; background: var(--card); color: var(--text); font: inherit; }
+        .workspace-search { width: 100%; max-width: none; min-width: 0; border: 1px solid rgba(148, 163, 184, .35); border-radius: 9px; padding: .5rem .7rem; background: var(--card); color: var(--text); font: inherit; }
+        .finance-date-range { position: relative; display: flex; align-items: center; justify-self: end; width: min(100%, 280px); min-width: 0; }
+        .finance-date-range > i { position: absolute; left: .75rem; z-index: 1; color: var(--accent); pointer-events: none; }
+        .finance-date-range input { width: 100%; min-width: 0; border: 1px solid rgba(148, 163, 184, .35); border-radius: 9px; padding: .5rem .7rem .5rem 2.15rem; background: var(--card); color: var(--text); font: inherit; font-size: .74rem; }
+        .finance-date-range input::placeholder { color: var(--muted); opacity: 1; }
+        .finance-kpis { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+        .finance-ledger-kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); margin: .9rem 1rem; }
+        #financeLedgerKpis { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .65rem; }
+        .finance-toolbar { grid-template-columns: minmax(0, 1fr) minmax(190px, 260px) minmax(220px, 300px) minmax(230px, 300px); }
+        .finance-toolbar .workspace-kicker { margin-right: 0; }
+        .orders-toolbar, .shipping-toolbar { grid-template-columns: minmax(0, 1fr) minmax(190px, 260px) minmax(220px, 300px) minmax(230px, 300px); }
+        .orders-toolbar .workspace-kicker, .shipping-toolbar .workspace-kicker { margin-right: 0; }
+        .orders-kpis { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+        .orders-kpi-combined { display: flex; align-items: baseline; flex-wrap: wrap; gap: .35rem; }
+        .orders-kpi-combined span { white-space: nowrap; }
+        .orders-kpi-combined small { color: var(--muted); font-size: .72rem; font-weight: 700; letter-spacing: 0; }
+        .orders-kpi-combined .separator { color: rgba(100, 116, 139, .55); font-size: 1.1rem; font-weight: 500; }
+        .orders-kpi-comparison { display: flex; align-items: center; justify-content: space-between; gap: .35rem; margin-top: .2rem; color: var(--muted); font-size: .59rem; font-weight: 650; }
+        .orders-kpi-comparison > span:last-child { display: inline-flex; align-items: center; gap: .12rem; }
+        .orders-kpi-combined-comparison > span:last-child { gap: .22rem; }
+        .orders-discount-panel { margin-bottom: .9rem; }
+        .orders-discount-breakdown { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .finance-tabs { display: flex; align-items: stretch; gap: .35rem; margin: .9rem 0 .9rem; padding: .35rem; border: 1px solid rgba(148, 163, 184, .24); border-radius: 14px; background: var(--card); box-shadow: 0 8px 22px rgba(15, 23, 42, .04); overflow-x: auto; }
+        .finance-tab { display: inline-flex; align-items: center; gap: .5rem; min-height: 2.7rem; border: 0; border-radius: 10px; padding: .55rem .85rem; color: var(--muted); background: transparent; font-size: .76rem; font-weight: 750; white-space: nowrap; cursor: pointer; }
+        .finance-tab i { font-size: .95rem; }
+        .finance-tab em, .finance-tab small { display: inline-grid; min-width: 1.35rem; height: 1.25rem; place-items: center; border-radius: 999px; padding: 0 .35rem; color: var(--muted); background: var(--card-soft); font-size: .64rem; font-style: normal; font-weight: 800; }
+        .finance-tab small { color: #92400e; background: #fef3c7; }
+        .finance-tab:hover { color: var(--text); background: var(--card-soft); }
+        .finance-tab.active { color: var(--accent); background: var(--accent-soft); box-shadow: inset 0 0 0 1px rgba(37, 99, 235, .1); }
+        .finance-tab-panel { min-width: 0; }
+        .orders-tabs { align-items: center; gap: .25rem; margin-top: .9rem; padding: .28rem; border-radius: 12px; box-shadow: none; }
+        .orders-tabs .finance-tab { min-height: 2.45rem; border-radius: 9px; padding: .5rem .75rem; font-size: .72rem; }
+        .orders-tabs .finance-tab.active { box-shadow: none; }
+        .orders-compare-control { display: inline-flex; align-items: center; gap: .4rem; margin: .08rem .08rem .08rem auto; padding: .22rem .25rem .22rem .7rem; border-left: 1px solid rgba(148, 163, 184, .22); white-space: nowrap; }
+        .orders-compare-control label { color: var(--muted); font-size: .65rem; font-weight: 750; }
+        .orders-compare-control select { min-height: 30px; border: 1px solid rgba(148, 163, 184, .3); border-radius: 7px; padding: .3rem .5rem; background: var(--card); color: var(--text); font: inherit; font-size: .66rem; }
+        .orders-tab-panel { min-width: 0; }
+        .shipping-tab-panel { min-width: 0; }
+        .orders-tab-panel .workspace-panel-head { padding: .85rem 1rem; }
+        .orders-tab-panel .workspace-panel-head h2 { font-size: .86rem; }
+        .orders-tab-panel .workspace-panel-head p { font-size: .69rem; }
+        .orders-kpis .workspace-kpi { border-radius: 14px; padding: .9rem 1rem; box-shadow: 0 5px 16px rgba(15, 23, 42, .035); }
+        .orders-kpis .workspace-kpi .value { margin: .45rem 0 .15rem; font-size: 1.45rem; }
+        .orders-date-table { width: 100%; min-width: 1060px; table-layout: auto; font-size: .68rem; }
+        .orders-date-table thead th { background: var(--card); }
+        .orders-date-table th, .orders-date-table td { padding: .48rem .34rem; line-height: 1.25; }
+        .orders-date-table tbody td { padding-block: .45rem; }
+        .orders-date-table th:first-child, .orders-date-table td:first-child { width: 150px; min-width: 150px; position: sticky; left: 0; z-index: 2; background: var(--card); }
+        .orders-date-table thead th:first-child { text-align: left; }
+        .orders-date-table thead th:nth-child(2), .orders-date-table thead th:nth-child(3) { text-align: center; }
+        .orders-date-table thead th:nth-child(n+4) { text-align: right; }
+        .orders-date-table .orders-value-cell { min-width: 116px; white-space: nowrap; text-align: right; font-size: .66rem; font-variant-numeric: tabular-nums; }
+        .orders-date-table .orders-average-cell { min-width: 124px; white-space: nowrap; text-align: right; font-size: .66rem; font-variant-numeric: tabular-nums; }
+        .orders-date-table .orders-count-value { width: 76px; min-width: 76px; white-space: nowrap; text-align: center; font-variant-numeric: tabular-nums; }
+        .orders-date-table .orders-value-cell strong, .orders-date-table .orders-count-value strong { display: block; }
+        .orders-current-line { display: flex; align-items: center; justify-content: flex-end; gap: .3rem; min-height: 1rem; }
+        .orders-count-value .orders-current-line { justify-content: center; }
+        .orders-difference-line { display: flex; align-items: center; justify-content: flex-end; min-height: .72rem; margin-top: .12rem; }
+        .orders-count-value .orders-difference-line { justify-content: center; }
+        .orders-inline-change { display: flex; flex: 0 0 auto; justify-content: flex-start; margin-top: 0; width: auto; }
+        .orders-inline-change .orders-trend { width: auto; }
+        .orders-date-comparison { display: block; margin-top: .16rem; color: var(--muted); font-size: .59rem; font-weight: 650; }
+        .orders-trend { display: inline-flex; align-items: center; justify-content: center; gap: .08rem; width: auto; padding: 0; border: 0; border-radius: 0; background: transparent; font-size: .52rem; font-weight: 800; white-space: nowrap; }
+        .orders-trend.up { color: #15803d; }
+        .orders-trend.down { color: #ef4444; }
+        .orders-trend.flat, .orders-trend.muted { color: var(--muted); }
+        .orders-trend-placeholder { display: block; min-height: .7rem; }
+        .orders-date-table thead th:first-child { z-index: 4; background: var(--card-soft); }
+        .orders-date-table thead th, .orders-finance-table thead th, .orders-shipping-table thead th { background: var(--card-soft); box-shadow: 0 1px 0 rgba(148, 163, 184, .2); }
+        .orders-date-table tbody tr:nth-child(even) { background: rgba(148, 163, 184, .035); }
+        .orders-date-table tbody tr:hover { background: var(--accent-soft); }
+        .orders-date-table tbody tr:hover td:first-child { background: var(--accent-soft); }
+        .orders-all-table { min-width: 1450px; }
+        .orders-all-table th:first-child, .orders-all-table td:first-child { min-width: 120px; }
+        .orders-all-table th:nth-child(2), .orders-all-table td:nth-child(2) { min-width: 180px; }
+        .orders-all-table th:nth-child(3), .orders-all-table td:nth-child(3) { min-width: 260px; }
+        .orders-all-table th:nth-child(4), .orders-all-table td:nth-child(4) { min-width: 150px; }
+        .orders-all-table th:nth-child(n+5), .orders-all-table td.numeric-cell { text-align: right; }
+        .orders-analysis-kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); margin-bottom: .9rem; }
+        .orders-product-table { min-width: 980px; }
+        .orders-product-table th:nth-child(n+3), .orders-product-table td.numeric-cell { text-align: right; }
+        .orders-product-table .product-cell { min-width: 360px; }
+        .orders-discount-table, .orders-status-table { min-width: 720px; }
+        .orders-discount-table th:nth-child(n+2), .orders-discount-table td.numeric-cell,
+        .orders-status-table th:nth-child(n+2), .orders-status-table td.numeric-cell { text-align: right; }
+        .promotion-tabs { margin-bottom: 1rem; }
+        .promotion-toolbar { align-items: center; }
+        .promotion-toolbar .workspace-badge { margin-left: auto; }
+        .promotion-kpis { margin-bottom: 1rem; }
+        .promotion-note { display: flex; gap: .7rem; align-items: flex-start; margin-bottom: 1rem; padding: .85rem 1rem; border: 1px solid var(--line); border-radius: 14px; background: var(--card-soft); color: var(--muted); font-size: .78rem; line-height: 1.5; }
+        .promotion-note i { color: var(--accent); font-size: 1.05rem; }
+        .promotion-form-panel { margin-bottom: 1rem; }
+        .promotion-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
+        .promotion-form-field { display: flex; flex-direction: column; gap: .3rem; }
+        .promotion-form-field label { color: var(--muted); font-size: .72rem; font-weight: 700; }
+        .promotion-form-field input, .promotion-form-field select { width: 100%; min-height: 38px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--text); padding: .5rem .65rem; }
+        .promotion-form-actions { display: flex; gap: .5rem; justify-content: flex-end; grid-column: 1 / -1; }
+        .promotion-table { min-width: 900px; }
+        .promotion-table .numeric-cell { white-space: nowrap; }
+        .promotion-add-button { border: 0; border-radius: 10px; background: var(--accent); color: #fff; padding: .55rem .8rem; font: inherit; font-size: .76rem; font-weight: 700; cursor: pointer; }
+        .promotion-add-button.secondary { background: var(--card-soft); color: var(--text); border: 1px solid var(--line); }
+        @media (max-width: 900px) { .promotion-form { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 620px) { .promotion-form { grid-template-columns: 1fr; } .promotion-form-actions { justify-content: stretch; } .promotion-form-actions button { flex: 1; } }
+        .shipping-date-table { width: 100%; min-width: 760px; table-layout: auto; font-size: .68rem; }
+        .shipping-date-table thead th { background: var(--card); }
+        .shipping-date-table th, .shipping-date-table td { padding: .48rem .34rem; line-height: 1.25; }
+        .shipping-date-table tbody td { padding-block: .45rem; }
+        .shipping-date-table th:first-child, .shipping-date-table td:first-child { width: 16%; }
+        .shipping-date-table th:nth-child(2), .shipping-date-table td:nth-child(2) { width: 17%; }
+        .shipping-date-table th:nth-child(3), .shipping-date-table td:nth-child(3) { width: 14%; }
+        .shipping-date-table th:nth-child(n+4) { width: 12%; }
+        .shipping-date-table .numeric-cell { white-space: nowrap; font-size: .66rem; }
+        .shipping-date-table .shipping-summary-cell strong { display: block; color: inherit; font-size: .68rem; }
+        .shipping-date-table .shipping-summary-cell small { display: block; margin-top: .12rem; color: var(--muted); font-size: .6rem; font-weight: 650; }
+        .shipping-date-table .shipping-progress-cell { min-width: 118px; vertical-align: middle; }
+        .shipping-date-table .shipping-progress-meta { display: flex; align-items: baseline; justify-content: space-between; gap: .35rem; margin-bottom: .28rem; }
+        .shipping-date-table .shipping-progress-meta strong { color: var(--text); font-size: .68rem; }
+        .shipping-date-table .shipping-progress-meta small { color: var(--muted); font-size: .58rem; font-weight: 650; white-space: nowrap; }
+        .shipping-date-table .shipping-progress { height: .36rem; overflow: hidden; border-radius: 999px; background: rgba(148, 163, 184, .2); }
+        .shipping-date-table .shipping-progress span { display: block; height: 100%; border-radius: inherit; background: var(--accent); transition: width .2s ease; }
+        .shipping-date-table .shipping-progress.is-active span { background: #f59e0b; }
+        .shipping-date-table .shipping-progress.is-complete span { background: #10b981; }
+        .shipping-date-table th:nth-child(n+3), .shipping-date-table td.numeric-cell { text-align: right; }
+        .shipping-date-table thead th { background: var(--card-soft); box-shadow: 0 1px 0 rgba(148, 163, 184, .2); }
+        .shipping-date-table tbody tr:nth-child(even) { background: rgba(148, 163, 184, .035); }
+        .orders-finance-table { min-width: 900px; }
+        .orders-finance-table th, .orders-finance-table td { padding-block: .68rem; }
+        .orders-shipping-table { min-width: 980px; }
+        .orders-shipping-table th, .orders-shipping-table td { padding-block: .68rem; }
+        .orders-panel-toolbar { display: flex; align-items: center; gap: .6rem; margin-left: auto; }
+        .orders-panel-toolbar .workspace-badge { white-space: nowrap; }
+        .orders-tab-kpis { margin: 1rem 0; }
+        .orders-item-line { display: block; margin-top: .28rem; }
+        .orders-item-line:first-child { margin-top: .18rem; }
+        .orders-item-line small { display: block; margin-top: .08rem; color: var(--muted); font-size: .68rem; }
+        .finance-guide-panel { margin-bottom: .9rem; }
+        .finance-guide-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .7rem; padding: 1rem; }
+        .finance-guide-grid > div { display: flex; align-items: flex-start; gap: .65rem; border: 1px solid rgba(148, 163, 184, .2); border-radius: 12px; padding: .8rem; background: var(--card-soft); }
+        .finance-guide-grid strong { display: block; color: var(--text); font-size: .78rem; }
+        .finance-guide-grid small { display: block; margin-top: .2rem; color: var(--muted); font-size: .7rem; line-height: 1.45; }
+        .finance-guide-number { display: grid; width: 1.5rem; height: 1.5rem; flex: 0 0 auto; place-items: center; border-radius: 50%; color: #fff; background: var(--accent); font-size: .7rem; font-weight: 800; }
+        .finance-filter-head { display: flex; align-items: center; gap: .75rem; padding: .75rem 1rem 0; color: var(--text); }
+        .finance-filter-head span { display: inline-flex; align-items: center; gap: .4rem; font-size: .72rem; font-weight: 800; }
+        .finance-filter-head span i { color: var(--accent); }
+        .finance-filter-actions { display: flex; align-items: center; justify-content: flex-end; gap: .4rem; margin-left: auto; }
+        .finance-shortcut { display: inline-flex; align-items: center; gap: .4rem; margin-left: auto; border: 1px solid rgba(37, 99, 235, .2); border-radius: 8px; padding: .38rem .58rem; color: var(--accent); background: var(--accent-soft); font: inherit; font-size: .67rem; font-weight: 800; white-space: nowrap; cursor: pointer; }
+        .finance-filter-actions .finance-shortcut { margin-left: 0; }
+        .finance-shortcut:hover { border-color: rgba(37, 99, 235, .4); background: rgba(37, 99, 235, .14); }
+        .finance-upload-hint { display: flex; align-items: flex-start; gap: .5rem; margin: .65rem 1rem 0; border: 1px solid rgba(37, 99, 235, .16); border-radius: 9px; padding: .58rem .7rem; color: var(--muted); background: var(--accent-soft); font-size: .68rem; line-height: 1.45; }
+        .finance-upload-hint > i { flex: 0 0 auto; margin-top: .08rem; color: var(--accent); }
+        .finance-upload-hint strong { color: var(--text); font-weight: 850; }
+        .finance-upload-date-separator { color: var(--muted); margin: 0 .12rem; }
+        .finance-type-tabs { display: flex; gap: .35rem; padding: .8rem 1rem .2rem; overflow-x: auto; }
+        .finance-type-tab { display: inline-flex; align-items: center; gap: .4rem; border: 1px solid rgba(148, 163, 184, .24); border-radius: 999px; padding: .38rem .65rem; color: var(--muted); background: var(--card); font-size: .7rem; font-weight: 750; white-space: nowrap; cursor: pointer; }
+        .finance-type-tab em { min-width: 1.1rem; border-radius: 999px; padding: .08rem .3rem; color: var(--muted); background: var(--card-soft); font-size: .62rem; font-style: normal; text-align: center; }
+        .finance-type-tab:hover { color: var(--text); border-color: rgba(37, 99, 235, .35); }
+        .finance-type-tab.active { border-color: rgba(37, 99, 235, .28); color: var(--accent); background: var(--accent-soft); }
+        .finance-type-tab-warning { border-color: rgba(217, 119, 6, .28); color: #92400e; }
+        .finance-type-tab-warning.active { border-color: rgba(217, 119, 6, .35); color: #92400e; background: #fef3c7; }
+        .finance-type-tab.active em { color: var(--accent); background: rgba(37, 99, 235, .12); }
+        .finance-table { min-width: 1120px; }
+        .finance-shipment-table { min-width: 900px; }
+        .finance-ledger-table-wrap, .finance-return-table-wrap, .finance-shipment-table-wrap, .finance-transfer-table-wrap { max-height: 560px; overflow: auto; }
+        .finance-table thead th, .finance-return-table thead th, .finance-shipment-table thead th, .finance-compact-table thead th { position: sticky; top: 0; z-index: 2; background: var(--card-soft); box-shadow: 0 1px 0 rgba(148, 163, 184, .2); }
+        .finance-table tbody tr:nth-child(even), .finance-return-table tbody tr:nth-child(even), .finance-shipment-table tbody tr:nth-child(even), .finance-compact-table tbody tr:nth-child(even) { background: rgba(148, 163, 184, .035); }
+        .finance-table tbody tr:hover, .finance-return-table tbody tr:hover, .finance-shipment-table tbody tr:hover, .finance-compact-table tbody tr:hover { background: var(--accent-soft); }
+        .finance-table th, .finance-table td, .finance-return-table th, .finance-return-table td, .finance-shipment-table th, .finance-shipment-table td, .finance-compact-table th, .finance-compact-table td { padding-block: .65rem; }
+        .finance-table th:first-child, .finance-table td:first-child { min-width: 260px; }
+        .finance-table th:nth-child(2), .finance-table td:nth-child(2), .finance-return-table th:nth-child(2), .finance-return-table td:nth-child(2) { min-width: 250px; }
+        .finance-table th:nth-child(4), .finance-table th:nth-child(5), .finance-table td.numeric-cell { text-align: right; }
+        .finance-return-table th:nth-child(n+3), .finance-return-table td.numeric-cell { text-align: right; }
+        .finance-summary-cell { min-width: 190px; max-width: 210px; white-space: normal; }
+        .finance-table .muted-line, .finance-return-table .muted-line { max-width: 330px; overflow: hidden; text-overflow: ellipsis; }
+        .finance-reference-status { display: flex !important; align-items: center; flex-wrap: wrap; gap: .3rem; }
+        .finance-item-cell { min-width: 190px; max-width: 235px; white-space: normal; }
+        .finance-item-line { display: -webkit-box; overflow: hidden; color: var(--text); font-size: .7rem; line-height: 1.35; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+        .finance-qty-cell { width: 64px; min-width: 64px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+        .finance-fee-detail-cell { min-width: 245px; max-width: 285px; white-space: normal; }
+        .finance-fee-detail-list { display: grid; gap: .12rem; }
+        .finance-fee-detail-list-standalone { margin-top: 0; padding-top: 0; border-top: 0; }
+        .finance-fee-detail-line { display: flex; align-items: baseline; justify-content: space-between; gap: .7rem; padding: .18rem 0; border-bottom: 1px solid rgba(148, 163, 184, .12); }
+        .finance-fee-detail-line:last-child { border-bottom: 0; }
+        .finance-fee-detail-line small { color: var(--muted); font-size: .66rem; }
+        .finance-fee-detail-line strong { color: var(--text); font-size: .7rem; white-space: nowrap; }
+        .finance-fee-detail-line em { margin-left: .25rem; color: var(--muted); font-size: .62rem; font-style: normal; font-weight: 650; }
+        .finance-summary-list { display: grid; gap: .12rem; }
+        .finance-summary-line { display: flex; align-items: baseline; justify-content: space-between; gap: .8rem; padding: .18rem 0; border-bottom: 1px solid rgba(148, 163, 184, .12); }
+        .finance-summary-line:last-child { border-bottom: 0; }
+        .finance-summary-line small { color: var(--muted); font-size: .68rem; font-weight: 700; }
+        .finance-summary-line strong { font-size: .72rem; white-space: nowrap; }
+        .finance-summary-line em { color: var(--muted); font-size: .64rem; font-style: normal; font-weight: 650; }
+        .finance-daily-panel { margin-bottom: .9rem; }
+        .finance-daily-panel .workspace-table-wrap { max-height: 390px; overflow: auto; }
+        .finance-fee-panel + .finance-daily-panel { margin-top: 1rem; }
+        .finance-daily-table { width: 100%; min-width: 0; table-layout: fixed; font-size: .68rem; }
+        .finance-daily-table thead th { position: sticky; top: 0; z-index: 2; background: var(--card); }
+        .finance-daily-table th, .finance-daily-table td { padding: .48rem .34rem; line-height: 1.25; }
+        .finance-daily-table tbody td { padding-block: .45rem; }
+        .finance-daily-table th:first-child, .finance-daily-table td:first-child { width: 10%; }
+        .finance-daily-table th:nth-child(2), .finance-daily-table th:nth-child(3), .finance-daily-table th:nth-child(4) { width: 6.5%; }
+        .finance-daily-table th:nth-child(5), .finance-daily-table th:nth-child(6), .finance-daily-table th:nth-child(7), .finance-daily-table th:nth-child(8), .finance-daily-table th:nth-child(9) { width: 10.5%; }
+        .finance-daily-table th:nth-child(10) { width: 9%; }
+        .finance-daily-table th:nth-child(11) { width: 8%; }
+        .finance-daily-table .numeric-cell { white-space: nowrap; font-size: .66rem; }
+        .finance-daily-table th:nth-child(n+2), .finance-daily-table td.numeric-cell { text-align: right; }
+        .warning-value { color: #92400e; font-weight: 750; }
+        .finance-date-cell { min-width: 250px; white-space: normal; }
+        .finance-date-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .75rem; }
+        .finance-date-main, .finance-date-side { display: grid; gap: .28rem; }
+        .finance-date-cell > span { display: block; margin-bottom: .28rem; }
+        .finance-date-cell > span:last-child { margin-bottom: 0; }
+        .finance-date-cell small { display: block; color: var(--muted); font-size: .63rem; }
+        .finance-date-cell strong { display: block; color: var(--text); font-size: .72rem; }
+        .finance-date-side { border-left: 1px solid rgba(148, 163, 184, .2); padding-left: .75rem; }
+        .finance-date-type { margin-top: .45rem; color: var(--accent); font-size: .67rem; font-weight: 800; }
+        .finance-date-store { display: flex !important; align-items: baseline; justify-content: flex-end; gap: .35rem; margin-top: .48rem; padding-top: .38rem; border-top: 1px solid rgba(148, 163, 184, .16); text-align: right; }
+        .finance-date-store small { color: var(--muted); font-size: .61rem; }
+        .finance-date-store strong { max-width: 150px; overflow: hidden; color: var(--text); font-size: .66rem; text-overflow: ellipsis; white-space: nowrap; }
+        .finance-type-cell { max-width: 220px; white-space: normal; line-height: 1.35; }
+        .numeric-cell { font-variant-numeric: tabular-nums; }
+        .negative-value { color: #b91c1c; }
+        .settlement-value { color: #166534; font-weight: 750; }
+        body[data-theme="dark"] .negative-value { color: #fca5a5; }
+        body[data-theme="dark"] .settlement-value { color: #86efac; }
+        body[data-theme="dark"] .warning-value { color: #fcd34d; }
+        .finance-compact-table { min-width: 520px; }
+        .finance-compact-table th, .finance-compact-table td { padding: .65rem .8rem; }
+        .finance-fee-panel { margin-top: .9rem; }
+        .finance-fee-breakdown { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .7rem; padding: 1rem; }
+        .finance-fee-breakdown > div { display: flex; align-items: flex-start; gap: .6rem; min-width: 0; border: 1px solid rgba(148, 163, 184, .2); border-radius: 11px; padding: .8rem; background: var(--card-soft); }
+        .finance-fee-breakdown i { color: var(--accent); font-size: 1rem; }
+        .finance-fee-breakdown span { min-width: 0; }
+        .finance-fee-breakdown strong { display: block; color: var(--text); font-size: .75rem; }
+        .finance-fee-breakdown small { display: block; margin-top: .18rem; color: var(--muted); font-size: .67rem; line-height: 1.35; }
+        .finance-fee-breakdown b { margin-left: auto; color: var(--text); font-size: .75rem; white-space: nowrap; }
+        .finance-other-fee-head { display: flex; align-items: center; justify-content: space-between; gap: .7rem; padding: .85rem 1rem .2rem; color: var(--text); font-size: .76rem; }
+        .finance-other-fee-head span { color: var(--muted); font-size: .68rem; }
+        .finance-other-fee-details { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .55rem; padding: .75rem 1rem 1rem; }
+        .finance-other-fee-details > div { display: flex; align-items: center; justify-content: space-between; gap: .6rem; border-bottom: 1px solid rgba(148, 163, 184, .16); padding: .55rem 0; }
+        .finance-other-fee-details strong { display: block; color: var(--text); font-size: .7rem; font-weight: 700; }
+        .finance-other-fee-details small { display: block; margin-top: .15rem; color: var(--muted); font-size: .65rem; }
+        .finance-other-fee-details b { color: var(--text); font-size: .7rem; white-space: nowrap; }
         .shipment-browser-only { margin-bottom: 1rem; }
-        @media (max-width: 1100px) { .workspace-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } .workspace-columns { grid-template-columns: 1fr; } }
+        @media (max-width: 1260px) { .finance-kpis, .orders-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); } .finance-fee-breakdown, .orders-discount-breakdown { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 900px) { .orders-tabs { flex-wrap: wrap; } .orders-compare-control { flex: 1 0 100%; justify-content: space-between; margin: .2rem 0 0; padding: .5rem .25rem .15rem; border-top: 1px solid rgba(148, 163, 184, .2); border-left: 0; } }
+        @media (max-width: 820px) { .finance-other-fee-details { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 1100px) { .workspace-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } #financeLedgerKpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } .workspace-columns { grid-template-columns: 1fr; } }
+        @media (max-width: 820px) { .finance-guide-grid { grid-template-columns: 1fr; } }
         @media (max-width: 820px) {
             .app-layout { display: block; padding-top: 76px; }
             .app-global-topbar { grid-template-columns: 72px minmax(0, 1fr); }
@@ -1798,9 +2324,14 @@
         }
         @media (max-width: 640px) {
             .workspace-kpis { gap: .6rem; }
+            .finance-ledger-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-inline: .75rem; }
+            .finance-fee-breakdown, .finance-other-fee-details, .orders-discount-breakdown { grid-template-columns: 1fr; }
+            .finance-filter-head { align-items: flex-start; flex-wrap: wrap; }
+            .finance-filter-actions { width: 100%; margin-left: 0; }
+            .finance-filter-actions .finance-shortcut { flex: 1; justify-content: center; }
             .workspace-kpi { padding: .85rem; }
             .workspace-kpi .value { font-size: 1.25rem; }
-            .workspace-toolbar { align-items: stretch; flex-direction: column; }
+            .workspace-toolbar { grid-template-columns: 1fr; align-items: stretch; }
             .workspace-filter { max-width: none; }
             .workspace-panel-head { align-items: flex-start; flex-direction: column; }
             .dashboard-orders-table, .dashboard-orders-table tbody { display: block; width: 100%; }
@@ -1844,17 +2375,26 @@
                 <a class="active" data-page-target="dashboard" href="/" aria-label="Buka Dashboard" title="Dashboard">
                     <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
                 </a>
-                <a data-page-target="orders" href="/pesanan" aria-label="Buka Pesanan dan Pengiriman" title="Pesanan dan Pengiriman">
-                    <i class="bi bi-box-seam"></i><span>Pesanan &amp; Pengiriman</span>
+                <a data-page-target="orders" href="/pesanan" aria-label="Buka Pesanan" title="Pesanan">
+                    <i class="bi bi-bag-check"></i><span>Pesanan</span>
                 </a>
-                <a data-page-target="finance" href="/keuangan" aria-label="Buka Keuangan" title="Keuangan">
-                    <i class="bi bi-wallet2"></i><span>Keuangan</span>
+                <a data-page-target="shipping" href="/pengiriman" aria-label="Buka Pengiriman" title="Pengiriman">
+                    <i class="bi bi-truck"></i><span>Pengiriman</span>
+                </a>
+                <a data-page-target="finance" href="/transaksi" aria-label="Buka Transaksi" title="Transaksi">
+                    <i class="bi bi-wallet2"></i><span>Transaksi</span>
+                </a>
+                <a data-page-target="promotions" href="/promosi" aria-label="Buka Promosi" title="Promosi">
+                    <i class="bi bi-tags"></i><span>Promosi</span>
                 </a>
             </nav>
             <div class="app-nav-label">Alat &amp; data</div>
             <nav class="app-nav">
                 <a data-page-target="pricing" href="/penentuan-harga" aria-label="Buka Penentuan Harga" title="Penentuan Harga">
                     <i class="bi bi-calculator-fill"></i><span>Penentuan Harga</span>
+                </a>
+                <a data-page-target="incomeImport" href="/import-keuangan" aria-label="Buka Import Keuangan dan Audit" title="Import Keuangan & Audit">
+                    <i class="bi bi-file-earmark-bar-graph-fill"></i><span>Import Keuangan</span>
                 </a>
                 <a data-page-target="shipmentImport" href="/import-pengiriman" aria-label="Buka Import Pengiriman" title="Import Pengiriman">
                     <i class="bi bi-cloud-arrow-up-fill"></i><span>Import Pengiriman</span>
@@ -1863,10 +2403,22 @@
                     <i class="bi bi-shop-window"></i><span>Toko</span>
                 </a>
             </nav>
+            <div class="app-nav-label">Katalog</div>
+            <nav class="app-nav">
+                <a data-page-target="products" href="/produk" aria-label="Buka Produk" title="Produk">
+                    <i class="bi bi-box-seam"></i><span>Produk</span>
+                </a>
+                <a data-page-target="variants" href="/produk-variant" aria-label="Buka Produk Variant" title="Produk Variant">
+                    <i class="bi bi-diagram-3"></i><span>Produk Variant</span>
+                </a>
+                <a data-page-target="orderMapping" href="/mapping-pesanan" aria-label="Buka Mapping Pesanan Marketplace" title="Mapping Pesanan Marketplace">
+                    <i class="bi bi-link-45deg"></i><span>Mapping Pesanan</span>
+                </a>
+            </nav>
 
             <div class="app-sidebar-footer">
                 <strong>Workspace lokal</strong>
-                Data contoh database dan data browser ditampilkan terpisah.
+                Transaksi tersimpan ke database lokal; pengaturan harga tetap tersimpan di perangkat.
             </div>
         </aside>
 
@@ -1900,32 +2452,200 @@
                                 </div>
                             </section>
                         </div>
+                        <section class="dashboard-module-section" aria-labelledby="dashboardModulesTitle">
+                            <div class="dashboard-module-head">
+                                <div>
+                                    <h2 id="dashboardModulesTitle">Modul workspace</h2>
+                                    <p>Semua modul yang sudah tersedia untuk mengelola operasional toko.</p>
+                                </div>
+                                <span class="dashboard-module-count"><i class="bi bi-circle-fill"></i> 10 modul aktif</span>
+                            </div>
+                            <div class="dashboard-module-groups">
+                                <div class="dashboard-module-group">
+                                    <div class="dashboard-module-group-head"><i class="bi bi-speedometer2"></i><span>Ringkasan operasional</span></div>
+                                    <div class="dashboard-module-list">
+                                        <button type="button" class="dashboard-module-card" data-page-target="orders"><span class="dashboard-module-icon"><i class="bi bi-bag-check"></i></span><span class="dashboard-module-copy"><strong>Pesanan</strong><small>Order, penjualan, dan status dana.</small></span><span class="dashboard-module-status">Aktif</span></button>
+                                        <button type="button" class="dashboard-module-card" data-page-target="shipping"><span class="dashboard-module-icon"><i class="bi bi-truck"></i></span><span class="dashboard-module-copy"><strong>Pengiriman</strong><small>Resi, status paket, dan kontrol pengiriman.</small></span><span class="dashboard-module-status">Aktif</span></button>
+                                        <button type="button" class="dashboard-module-card" data-page-target="finance"><span class="dashboard-module-icon"><i class="bi bi-wallet2"></i></span><span class="dashboard-module-copy"><strong>Transaksi</strong><small>Penjualan, biaya, pencairan, dan rekonsiliasi.</small></span><span class="dashboard-module-status">Aktif</span></button>
+                                    </div>
+                                </div>
+                                <div class="dashboard-module-group">
+                                    <div class="dashboard-module-group-head"><i class="bi bi-tools"></i><span>Alat &amp; data</span></div>
+                                    <div class="dashboard-module-list">
+                                        <button type="button" class="dashboard-module-card" data-page-target="pricing"><span class="dashboard-module-icon"><i class="bi bi-calculator"></i></span><span class="dashboard-module-copy"><strong>Penentuan Harga</strong><small>HPP, fee, profit, dan target ROAS.</small></span><span class="dashboard-module-status">Aktif</span></button>
+                                        <button type="button" class="dashboard-module-card" data-page-target="incomeImport"><span class="dashboard-module-icon"><i class="bi bi-file-earmark-spreadsheet"></i></span><span class="dashboard-module-copy"><strong>Import Keuangan &amp; Audit</strong><small>Import laporan income dan cek rekonsiliasi.</small></span><span class="dashboard-module-status">Aktif</span></button>
+                                        <button type="button" class="dashboard-module-card" data-page-target="shipmentImport"><span class="dashboard-module-icon"><i class="bi bi-cloud-arrow-up"></i></span><span class="dashboard-module-copy"><strong>Import Pengiriman</strong><small>Preview dan simpan CSV/XLSX pengiriman.</small></span><span class="dashboard-module-status">Aktif</span></button>
+                                        <button type="button" class="dashboard-module-card" data-page-target="stores"><span class="dashboard-module-icon"><i class="bi bi-shop"></i></span><span class="dashboard-module-copy"><strong>Toko</strong><small>Kelola identitas dan pilihan toko.</small></span><span class="dashboard-module-status">Aktif</span></button>
+                                    </div>
+                                </div>
+                                <div class="dashboard-module-group">
+                                    <div class="dashboard-module-group-head"><i class="bi bi-box-seam"></i><span>Katalog</span></div>
+                                    <div class="dashboard-module-list">
+                                        <button type="button" class="dashboard-module-card" data-page-target="products"><span class="dashboard-module-icon"><i class="bi bi-box"></i></span><span class="dashboard-module-copy"><strong>Produk</strong><small>Master produk dan relasi ke variant.</small></span><span class="dashboard-module-status">Aktif</span></button>
+                                        <button type="button" class="dashboard-module-card" data-page-target="variants"><span class="dashboard-module-icon"><i class="bi bi-diagram-3"></i></span><span class="dashboard-module-copy"><strong>Produk Variant</strong><small>SKU internal dan atribut varian.</small></span><span class="dashboard-module-status">Aktif</span></button>
+                                        <button type="button" class="dashboard-module-card" data-page-target="orderMapping"><span class="dashboard-module-icon"><i class="bi bi-link-45deg"></i></span><span class="dashboard-module-copy"><strong>Mapping Pesanan Marketplace</strong><small>Hubungkan SKU marketplace ke katalog internal.</small></span><span class="dashboard-module-status">Aktif</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </section>
 
                 <section class="page-view" data-page-view="orders" hidden>
                     <div class="workspace-wrap">
-                        <div class="workspace-toolbar"><span class="workspace-kicker">Maksimal 100 item terbaru dari toko terpilih</span><select class="workspace-filter" data-workspace-store aria-label="Filter toko pesanan"><option value="">Memuat toko…</option></select><input class="workspace-search" id="ordersSearch" type="search" placeholder="Cari order, produk, SKU, resi…" aria-label="Cari pesanan"></div>
+                        <div class="workspace-toolbar orders-toolbar"><span class="workspace-kicker">Pesanan toko</span><select class="workspace-filter" data-workspace-store aria-label="Filter toko pesanan"><option value="">Memuat toko…</option></select><input class="workspace-search" id="ordersSearch" type="search" placeholder="Cari order, produk, SKU, resi…" aria-label="Cari pesanan"><div class="finance-date-range"><i class="bi bi-calendar3" aria-hidden="true"></i><input id="ordersDateRange" type="text" data-flatpickr data-flatpickr-mode="range" data-flatpickr-alt-format="d M Y" placeholder="Pilih rentang tanggal order" aria-label="Pilih rentang tanggal order"></div></div>
                         <div class="workspace-notice error" id="workspaceOrdersError" hidden role="alert"></div>
-                        <div class="workspace-notice"><i class="bi bi-info-circle"></i><span>Status kirim berasal dari file pesanan. Status dana berasal dari laporan keuangan dan tidak otomatis berarti uang sudah ditransfer ke bank.</span></div>
-                        <div class="workspace-kpis" id="ordersKpis"></div>
-                        <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Daftar item dikirim</h2><p id="ordersResultCount">—</p></div></div><div class="workspace-table-wrap"><table class="workspace-table"><thead><tr><th>Order ID</th><th>Produk / varian</th><th>SKU / Qty</th><th>Resi / kurir</th><th>Pengiriman</th><th>Dana</th><th>Nilai order</th></tr></thead><tbody id="ordersTableBody"></tbody></table></div></section>
+                        <div class="orders-tabs finance-tabs" role="tablist" aria-label="Workspace pesanan">
+                            <button type="button" class="finance-tab active" id="ordersTabOverview" data-orders-tab="overview" role="tab" aria-selected="true" aria-controls="ordersPanelOverview"><i class="bi bi-grid-1x2"></i><span>Ringkasan</span></button>
+                            <button type="button" class="finance-tab" id="ordersTabAll" data-orders-tab="all" role="tab" aria-selected="false" aria-controls="ordersPanelAll" tabindex="-1"><i class="bi bi-list-ul"></i><span>Semua pesanan</span><em id="ordersTabAllCount">—</em></button>
+                            <button type="button" class="finance-tab" id="ordersTabProducts" data-orders-tab="products" role="tab" aria-selected="false" aria-controls="ordersPanelProducts" tabindex="-1"><i class="bi bi-box-seam"></i><span>Produk / SKU</span></button>
+                            <button type="button" class="finance-tab" id="ordersTabDiscounts" data-orders-tab="discounts" role="tab" aria-selected="false" aria-controls="ordersPanelDiscounts" tabindex="-1"><i class="bi bi-tags"></i><span>Diskon</span></button>
+                            <button type="button" class="finance-tab" id="ordersTabStatus" data-orders-tab="status" role="tab" aria-selected="false" aria-controls="ordersPanelStatus" tabindex="-1"><i class="bi bi-kanban"></i><span>Status pesanan</span></button>
+                            <div class="orders-compare-control"><label for="ordersCompareMode">Bandingkan</label><select id="ordersCompareMode" aria-label="Bandingkan data pesanan"><option value="previous">Periode sebelumnya</option><option value="none">Tidak dibandingkan</option></select></div>
+                        </div>
+
+                        <section class="orders-tab-panel" id="ordersPanelOverview" data-orders-panel="overview" role="tabpanel" aria-labelledby="ordersTabOverview">
+                            <div class="workspace-kpis orders-kpis" id="ordersKpis"></div>
+                            <div class="workspace-stack">
+                            <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Ringkasan per tanggal order</h2><p>Nilai periode sekarang, pembanding, dan persentase perubahan per tanggal.</p></div><span class="workspace-badge">Per hari</span></div><div class="workspace-table-wrap"><table class="workspace-table orders-date-table"><thead><tr><th>Tanggal order</th><th>Order</th><th>Item</th><th title="Penjualan sebelum diskon">Penjualan kotor</th><th title="SKU Subtotal After Discount / pembayaran pembeli">Penjualan bersih</th><th title="Rata-rata Penjualan bersih per order">Rata-rata bersih</th><th title="Nilai pembayaran pembeli dari Order Amount marketplace">Pembayaran pembeli</th><th title="Rata-rata Pembayaran pembeli per order">Rata-rata pembayaran</th></tr></thead><tbody id="ordersDailyRows"></tbody></table></div></section>
+                            </div>
+                        </section>
+
+                        <section class="orders-tab-panel" id="ordersPanelAll" data-orders-panel="all" role="tabpanel" aria-labelledby="ordersTabAll" hidden>
+                            <div class="workspace-kpis orders-tab-kpis" id="ordersAllKpis"></div>
+                            <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Semua order &amp; item</h2><p id="ordersResultCount">—</p></div><div class="orders-panel-toolbar"><span class="workspace-badge">Satu baris per order</span></div></div><div class="workspace-table-wrap"><table class="workspace-table orders-all-table"><thead><tr><th>Tanggal order</th><th>Order</th><th>Item</th><th>SKU / Qty</th><th>Order Amount</th><th>Penjualan kotor</th><th title="Diskon yang ditanggung penjual">Diskon penjual</th><th title="Subsidi diskon dari platform">Diskon platform</th><th title="Diskon dari metode pembayaran">Diskon pembayaran</th><th title="Gabungan seluruh komponen diskon">Total diskon</th><th title="SKU Subtotal After Discount / pembayaran pembeli">Penjualan bersih</th></tr></thead><tbody id="ordersTableBody"></tbody></table></div></section>
+                        </section>
+
+                        <section class="orders-tab-panel" id="ordersPanelProducts" data-orders-panel="products" role="tabpanel" aria-labelledby="ordersTabProducts" hidden>
+                            <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Performa produk / SKU</h2><p id="ordersProductCount">—</p></div><span class="workspace-badge">Urut penjualan bersih</span></div><div class="workspace-table-wrap"><table class="workspace-table orders-product-table"><thead><tr><th>SKU</th><th>Produk / varian</th><th>Order</th><th>Qty</th><th>Penjualan kotor</th><th>Penjualan bersih</th><th>AOV bersih</th></tr></thead><tbody id="ordersProductRows"></tbody></table></div></section>
+                        </section>
+
+                        <section class="orders-tab-panel" id="ordersPanelDiscounts" data-orders-panel="discounts" role="tabpanel" aria-labelledby="ordersTabDiscounts" hidden>
+                            <div class="workspace-kpis orders-analysis-kpis" id="ordersDiscountKpis"></div>
+                            <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Rincian diskon</h2><p>Diskon pembayaran berasal dari promo metode pembayaran marketplace.</p></div><span class="workspace-badge">Berdasarkan order</span></div><div class="workspace-table-wrap"><table class="workspace-table orders-discount-table"><thead><tr><th>Komponen diskon</th><th>Nilai</th><th>Proporsi</th></tr></thead><tbody id="ordersDiscountRows"></tbody></table></div></section>
+                        </section>
+
+                        <section class="orders-tab-panel" id="ordersPanelStatus" data-orders-panel="status" role="tabpanel" aria-labelledby="ordersTabStatus" hidden>
+                            <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Status pesanan</h2><p id="ordersStatusCount">—</p></div><span class="workspace-badge">Distribusi order</span></div><div class="workspace-table-wrap"><table class="workspace-table orders-status-table"><thead><tr><th>Status</th><th>Order</th><th>Item</th><th>Order Amount</th><th>Penjualan bersih</th><th>AOV bersih</th></tr></thead><tbody id="ordersStatusRows"></tbody></table></div></section>
+                        </section>
+
+                    </div>
+                </section>
+
+                <section class="page-view" data-page-view="shipping" hidden>
+                    <div class="workspace-wrap">
+                        <div class="workspace-toolbar shipping-toolbar"><span class="workspace-kicker">Pengiriman toko</span><select class="workspace-filter" data-workspace-store aria-label="Filter toko pengiriman"><option value="">Memuat toko…</option></select><input class="workspace-search" id="shippingSearch" type="search" placeholder="Cari order, produk, resi, kurir…" aria-label="Cari pengiriman"><div class="finance-date-range"><i class="bi bi-calendar3" aria-hidden="true"></i><input id="shippingDateRange" type="text" data-flatpickr data-flatpickr-mode="range" data-flatpickr-alt-format="d M Y" placeholder="Pilih rentang tanggal dikirim" aria-label="Pilih rentang tanggal dikirim"></div></div>
+                        <div class="workspace-notice error" id="workspaceShippingError" hidden role="alert"></div>
+                        <div class="workspace-kpis orders-kpis" id="shippingKpis"></div>
+                        <div class="finance-tabs shipping-tabs" role="tablist" aria-label="Workspace pengiriman">
+                            <button type="button" class="finance-tab active" id="shippingTabOverview" data-shipping-tab="overview" role="tab" aria-selected="true" aria-controls="shippingPanelOverview"><i class="bi bi-grid-1x2"></i><span>Ringkasan</span></button>
+                            <button type="button" class="finance-tab" id="shippingTabPending" data-shipping-tab="pending" role="tab" aria-selected="false" aria-controls="shippingPanelControl" tabindex="-1"><i class="bi bi-hourglass-split"></i><span>Menunggu dikirim</span><em id="shippingTabPendingCount">—</em></button>
+                            <button type="button" class="finance-tab" id="shippingTabInTransit" data-shipping-tab="in-transit" role="tab" aria-selected="false" aria-controls="shippingPanelControl" tabindex="-1"><i class="bi bi-truck"></i><span>Sedang dikirim</span><em id="shippingTabInTransitCount">—</em></button>
+                            <button type="button" class="finance-tab" id="shippingTabCompleted" data-shipping-tab="completed" role="tab" aria-selected="false" aria-controls="shippingPanelControl" tabindex="-1"><i class="bi bi-check2-circle"></i><span>Selesai</span><em id="shippingTabCompletedCount">—</em></button>
+                            <button type="button" class="finance-tab" id="shippingTabFailed" data-shipping-tab="failed" role="tab" aria-selected="false" aria-controls="shippingPanelControl" tabindex="-1"><i class="bi bi-exclamation-triangle"></i><span>Gagal / Retur</span><em id="shippingTabFailedCount">—</em></button>
+                            <button type="button" class="finance-tab" id="shippingTabAll" data-shipping-tab="all" role="tab" aria-selected="false" aria-controls="shippingPanelControl" tabindex="-1"><i class="bi bi-list-ul"></i><span>Semua pengiriman</span><em id="shippingTabAllCount">—</em></button>
+                        </div>
+                        <section class="shipping-tab-panel" id="shippingPanelOverview" data-shipping-panel="overview" role="tabpanel" aria-labelledby="shippingTabOverview">
+                            <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Ringkasan per tanggal dikirim</h2><p>Semua angka dikelompokkan berdasarkan tanggal paket dikirim.</p></div><span class="workspace-badge">Tanggal dikirim</span></div><div class="workspace-table-wrap"><table class="workspace-table shipping-date-table"><thead><tr><th>Tanggal dikirim</th><th>Progress</th><th>Order / Item</th><th>Menunggu dikirim</th><th>Dikirim</th><th>Diterima</th><th>Pengiriman gagal</th></tr></thead><tbody id="shippingDailyRows"></tbody></table></div></section>
+                        </section>
+                        <section class="shipping-tab-panel" id="shippingPanelControl" data-shipping-panel="control" role="tabpanel" aria-labelledby="shippingTabAll" hidden>
+                            <section class="workspace-panel"><div class="workspace-panel-head"><div><h2 id="shippingControlTitle">Semua pengiriman</h2><p id="shippingResultCount">—</p></div><span class="workspace-badge">Status operasional</span></div><div class="workspace-table-wrap"><table class="workspace-table orders-shipping-table"><thead><tr><th>Order ID</th><th>Produk</th><th>Status</th><th>Resi / kurir</th><th>Tanggal dikirim</th><th>Tanggal diterima</th><th>Status dana</th></tr></thead><tbody id="shippingRows"></tbody></table></div></section>
+                        </section>
                     </div>
                 </section>
 
                 <section class="page-view" data-page-view="finance" hidden>
                     <div class="workspace-wrap">
-                        <div class="workspace-toolbar"><span class="workspace-kicker">Laporan keuangan dari database impor</span><select class="workspace-filter" data-workspace-store aria-label="Filter toko keuangan"><option value="">Memuat toko…</option></select></div>
+                        <div class="workspace-toolbar finance-toolbar"><span class="workspace-kicker">Transaksi toko</span><select class="workspace-filter" data-workspace-store aria-label="Pilih toko transaksi"><option value="">Memuat toko…</option></select><input class="workspace-search" id="financeSearch" type="search" placeholder="Cari pesanan atau resi…" aria-label="Cari transaksi"><div class="finance-date-range"><i class="bi bi-calendar3" aria-hidden="true"></i><input id="financeDateRange" type="text" data-flatpickr data-flatpickr-mode="range" data-flatpickr-alt-format="d M Y" placeholder="Pilih rentang tanggal" aria-label="Pilih rentang tanggal transaksi"></div></div>
                         <div class="workspace-notice error" id="workspaceFinanceError" hidden role="alert"></div>
-                        <div class="workspace-notice"><i class="bi bi-info-circle"></i><span>Dana masuk saldo dan penarikan ke bank adalah dua peristiwa berbeda. Penarikan belum bisa dikaitkan otomatis ke order tertentu tanpa referensi yang cocok.</span></div>
-                        <div class="workspace-kpis" id="financeKpis"></div>
-                        <div class="workspace-columns">
-                            <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Rekonsiliasi pesanan</h2><p>Pesanan file pengiriman dibandingkan dengan laporan pencairan.</p></div></div><div class="workspace-table-wrap"><table class="workspace-table"><thead><tr><th>Order ID</th><th>Nilai order</th><th>Status dana</th></tr></thead><tbody id="financeOrderRows"></tbody></table></div></section>
-                            <div class="workspace-stack">
-                                <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Perlu perhatian</h2><p>Data yang belum bisa dicocokkan otomatis.</p></div></div><div class="workspace-action-list" id="financeAttention"></div></section>
-                                <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Promosi &amp; diskon</h2><p>Hanya dari item pesanan yang diimpor.</p></div></div><div class="workspace-action-list" id="financePromotions"></div></section>
-                            </div>
+                        <div class="workspace-kpis finance-kpis" id="financeKpis"></div>
+                        <div class="finance-tabs" role="tablist" aria-label="Workspace transaksi">
+                            <button type="button" class="finance-tab active" id="financeTabOverview" data-finance-tab="overview" role="tab" aria-selected="true" aria-controls="financePanelOverview"><i class="bi bi-grid-1x2"></i><span>Ringkasan</span></button>
+                            <button type="button" class="finance-tab" id="financeTabAds" data-finance-tab="ads" role="tab" aria-selected="false" aria-controls="financePanelAds" tabindex="-1"><i class="bi bi-megaphone"></i><span>Iklan</span><em id="financeTabAdsCount">—</em></button>
+                            <button type="button" class="finance-tab" id="financeTabLedger" data-finance-tab="ledger" role="tab" aria-selected="false" aria-controls="financePanelLedger" tabindex="-1"><i class="bi bi-journal-text"></i><span>Riwayat</span><em id="financeTabLedgerCount">—</em></button>
+                            <button type="button" class="finance-tab" id="financeTabShipment" data-finance-tab="shipment" role="tab" aria-selected="false" aria-controls="financePanelShipment" tabindex="-1"><i class="bi bi-truck"></i><span>Rekonsiliasi</span><em id="financeTabShipmentCount">—</em></button>
+                            <button type="button" class="finance-tab" id="financeTabTransfer" data-finance-tab="transfer" role="tab" aria-selected="false" aria-controls="financePanelTransfer" tabindex="-1"><i class="bi bi-bank"></i><span>Pencairan &amp; audit</span><em id="financeTabTransferCount">—</em><small id="financeTabControlCount" title="Perlu dicek">—</small></button>
                         </div>
+
+                        <section class="finance-tab-panel" id="financePanelOverview" data-finance-panel="overview" role="tabpanel" aria-labelledby="financeTabOverview">
+                            <section class="workspace-panel finance-fee-panel"><div class="workspace-panel-head"><div><h2>Rincian biaya transaksi</h2></div><span class="workspace-badge">% dari penjualan</span></div><div class="finance-fee-breakdown" id="financeFeeBreakdown"></div><div class="finance-other-fee-head"><strong>Komponen biaya lainnya</strong><span>Persentase dari penjualan kotor</span></div><div class="finance-other-fee-details" id="financeOtherFeeDetails"></div></section>
+                            <section class="workspace-panel finance-daily-panel"><div class="workspace-panel-head"><div><h2>Ringkasan transaksi per tanggal</h2><p>Order, pencairan, biaya, dan retur berdasarkan tanggal order.</p></div><span class="workspace-badge">Tanggal order</span></div><div class="workspace-table-wrap"><table class="workspace-table finance-daily-table"><thead><tr><th title="Tanggal order dari data kirim">Tanggal order</th><th title="Jumlah order dari data kirim">Order</th><th title="Order yang sudah cair">Cair</th><th title="Order yang belum cair">Belum cair</th><th title="Penjualan sebelum diskon">Penjualan kotor</th><th title="Penjualan setelah diskon dan retur">Penjualan bersih</th><th title="Total biaya">Biaya</th><th title="Penghasilan cair">Dana cair</th><th title="Penghasilan belum cair">Dana belum cair</th><th title="Dana pengembalian">Retur</th><th title="Pengiriman gagal">Kirim gagal</th></tr></thead><tbody id="financeDailyRows"></tbody></table></div></section>
+                        </section>
+
+                        <section class="finance-tab-panel" id="financePanelAds" data-finance-panel="ads" role="tabpanel" aria-labelledby="financeTabAds" hidden>
+                            <section class="workspace-panel">
+                                <div class="workspace-panel-head"><div><h2>Transaksi iklan TikTok</h2><p id="financeAdsCount">—</p></div><span class="workspace-badge">Biaya pemasaran</span></div>
+                                <div class="workspace-kpis finance-ledger-kpis" id="financeAdsKpis"></div>
+                                <div class="workspace-table-wrap finance-ledger-table-wrap"><table class="workspace-table finance-table"><thead><tr><th>Tanggal</th><th>Referensi &amp; status</th><th>Ringkasan</th><th>Rincian biaya</th></tr></thead><tbody id="financeAdsRows"></tbody></table></div>
+                            </section>
+                        </section>
+
+                        <section class="finance-tab-panel" id="financePanelLedger" data-finance-panel="ledger" role="tabpanel" aria-labelledby="financeTabLedger" hidden>
+                            <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Riwayat transaksi</h2><p id="financeTransactionCount">—</p></div><span class="workspace-badge">Data lengkap</span></div><div class="finance-filter-head"><span><i class="bi bi-funnel"></i> Filter transaksi</span><div class="finance-filter-actions"><button type="button" class="finance-shortcut" data-page-target="incomeImport" aria-label="Buka Import transaksi"><i class="bi bi-file-earmark-spreadsheet"></i><span>Import transaksi</span><i class="bi bi-arrow-up-right"></i></button><button type="button" class="finance-shortcut" data-page-target="shipmentImport" aria-label="Buka Import data kirim"><i class="bi bi-cloud-arrow-up"></i><span>Import data kirim</span><i class="bi bi-arrow-up-right"></i></button></div></div><div class="finance-type-tabs" id="financeTypeTabs" role="tablist" aria-label="Filter jenis transaksi"></div><div class="finance-upload-hint" id="financeUploadHint" hidden></div><div class="workspace-kpis finance-ledger-kpis" id="financeLedgerKpis"></div><div class="workspace-table-wrap finance-ledger-table-wrap"><table class="workspace-table finance-table"><thead><tr><th>Tanggal</th><th>Referensi &amp; status</th><th>Items</th><th>Qty</th><th>Ringkasan</th><th>Biaya</th></tr></thead><tbody id="financeOrderRows"></tbody></table></div></section>
+                        </section>
+
+                        <section class="finance-tab-panel" id="financePanelShipment" data-finance-panel="shipment" role="tabpanel" aria-labelledby="financeTabShipment" hidden>
+                            <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Rekonsiliasi pesanan &amp; pengiriman</h2><p id="financeShipmentCount">—</p></div><span class="workspace-badge">Cocokkan transaksi</span></div><div class="workspace-table-wrap finance-shipment-table-wrap"><table class="workspace-table finance-shipment-table"><thead><tr><th>Nomor pesanan / referensi</th><th>Status &amp; resi</th><th>Tanggal dikirim</th><th>Tanggal diterima</th><th>Dana bersih</th><th>Status dana</th></tr></thead><tbody id="financeShipmentRows"></tbody></table></div></section>
+                        </section>
+
+                        <section class="finance-tab-panel" id="financePanelTransfer" data-finance-panel="transfer" role="tabpanel" aria-labelledby="financeTabTransfer" hidden>
+                            <div class="workspace-columns">
+                                <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Pencairan dana</h2><p>8 aktivitas pencairan terakhir.</p></div><span class="workspace-badge">Riwayat saldo</span></div><div class="workspace-table-wrap finance-transfer-table-wrap"><table class="workspace-table finance-compact-table"><thead><tr><th>Tanggal / referensi</th><th>Jenis</th><th>Nilai</th><th>Status</th></tr></thead><tbody id="financeTransferRows"></tbody></table></div></section>
+                                <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Perlu dicek</h2><p>Belum cocok otomatis</p></div><span class="workspace-badge warning">Perlu perhatian</span></div><div class="workspace-action-list" id="financeAttention"></div></section>
+                            </div>
+                        </section>
+                    </div>
+                </section>
+
+                <section class="page-view" data-page-view="promotions" hidden>
+                    <div class="workspace-wrap">
+                        <div class="workspace-toolbar promotion-toolbar"><span class="workspace-kicker">Promosi toko</span><span class="workspace-badge">Voucher · Bundle · Campaign</span></div>
+                        <div class="promotion-note"><i class="bi bi-info-circle"></i><span>File Pengiriman belum membawa kategori promo seperti voucher atau bundle. Modul ini menyimpan definisi promo secara terpisah, sementara nominal diskon order tetap berasal dari data Pengiriman dan Keuangan.</span></div>
+                        <div class="workspace-kpis promotion-kpis" id="promotionKpis"></div>
+                        <div class="finance-tabs promotion-tabs" role="tablist" aria-label="Workspace promosi">
+                            <button type="button" class="finance-tab active" data-promotion-tab="summary" role="tab" aria-selected="true"><i class="bi bi-grid-1x2"></i><span>Ringkasan</span></button>
+                            <button type="button" class="finance-tab" data-promotion-tab="voucher" role="tab" aria-selected="false"><i class="bi bi-ticket-perforated"></i><span>Voucher</span></button>
+                            <button type="button" class="finance-tab" data-promotion-tab="bundle" role="tab" aria-selected="false"><i class="bi bi-box-seam"></i><span>Bundle / Paket</span></button>
+                            <button type="button" class="finance-tab" data-promotion-tab="campaign" role="tab" aria-selected="false"><i class="bi bi-megaphone"></i><span>Campaign</span></button>
+                        </div>
+
+                        <section class="promotion-tab-panel" data-promotion-panel="summary" role="tabpanel">
+                            <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Daftar promosi</h2><p id="promotionSummaryNote">—</p></div><button type="button" class="promotion-add-button" data-promotion-open-form="voucher"><i class="bi bi-plus-lg"></i> Tambah promosi</button></div><div class="workspace-table-wrap"><table class="workspace-table promotion-table"><thead><tr><th>Nama promosi</th><th>Periode</th><th>Kode / detail</th><th>Diskon</th><th>Penggunaan</th><th>Status</th></tr></thead><tbody id="promotionSummaryRows"></tbody></table></div></section>
+                            <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Diskon terdeteksi dari order</h2><p>Hasil backfill dari file Pengiriman. Belum dikategorikan sebagai voucher, bundle, atau campaign.</p></div><span class="workspace-badge">Sumber: import Pengiriman</span></div><div class="workspace-table-wrap"><table class="workspace-table promotion-table"><thead><tr><th>Komponen diskon</th><th>Ditanggung</th><th>Order</th><th>Baris data</th><th>Nilai diskon</th><th>Status</th></tr></thead><tbody id="promotionDetectedRows"></tbody></table></div></section>
+                        </section>
+
+                        <section class="promotion-tab-panel" data-promotion-panel="voucher" role="tabpanel" hidden>
+                            <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Voucher</h2><p>Kode voucher, nilai diskon, dan periode aktif.</p></div><button type="button" class="promotion-add-button" data-promotion-open-form="voucher"><i class="bi bi-plus-lg"></i> Tambah voucher</button></div><div class="workspace-table-wrap"><table class="workspace-table promotion-table"><thead><tr><th>Nama</th><th>Kode voucher</th><th>Periode</th><th>Diskon</th><th>Penggunaan</th><th>Status</th></tr></thead><tbody id="promotionVoucherRows"></tbody></table></div></section>
+                        </section>
+
+                        <section class="promotion-tab-panel" data-promotion-panel="bundle" role="tabpanel" hidden>
+                            <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Bundle / Paket</h2><p>Gabungkan SKU dan bandingkan harga normal dengan harga paket.</p></div><button type="button" class="promotion-add-button" data-promotion-open-form="bundle"><i class="bi bi-plus-lg"></i> Tambah bundle</button></div><div class="workspace-table-wrap"><table class="workspace-table promotion-table"><thead><tr><th>Nama bundle</th><th>SKU / produk</th><th>Harga normal</th><th>Harga paket</th><th>Hemat</th><th>Periode</th><th>Status</th></tr></thead><tbody id="promotionBundleRows"></tbody></table></div></section>
+                        </section>
+
+                        <section class="promotion-tab-panel" data-promotion-panel="campaign" role="tabpanel" hidden>
+                            <section class="workspace-panel"><div class="workspace-panel-head"><div><h2>Campaign</h2><p>Catat campaign, channel, target, dan periode promosi.</p></div><button type="button" class="promotion-add-button" data-promotion-open-form="campaign"><i class="bi bi-plus-lg"></i> Tambah campaign</button></div><div class="workspace-table-wrap"><table class="workspace-table promotion-table"><thead><tr><th>Nama campaign</th><th>Channel</th><th>Target</th><th>Periode</th><th>Penggunaan</th><th>Status</th></tr></thead><tbody id="promotionCampaignRows"></tbody></table></div></section>
+                        </section>
+
+                        <section class="workspace-panel promotion-form-panel" id="promotionFormPanel" hidden>
+                            <div class="workspace-panel-head"><div><h2>Tambah promosi</h2><p>Catat struktur promosi agar bisa dikaitkan ke order dan SKU saat sumber data tersedia.</p></div><span class="workspace-badge">Tersimpan di perangkat</span></div>
+                            <form class="promotion-form" id="promotionForm">
+                                <div class="promotion-form-field"><label for="promotionFormType">Jenis promosi</label><select id="promotionFormType" name="type"><option value="voucher">Voucher</option><option value="bundle">Bundle / Paket</option><option value="campaign">Campaign</option></select></div>
+                                <div class="promotion-form-field"><label for="promotionName">Nama promosi</label><input id="promotionName" name="name" type="text" placeholder="Contoh: Payday Oktober" required></div>
+                                <div class="promotion-form-field" id="promotionCodeField"><label for="promotionCode">Kode voucher</label><input id="promotionCode" name="code" type="text" placeholder="Contoh: PAYDAY10"></div>
+                                <div class="promotion-form-field" id="promotionItemsField" hidden><label for="promotionItems">SKU / produk bundle</label><input id="promotionItems" name="items" type="text" placeholder="SKU-A + SKU-B"></div>
+                                <div class="promotion-form-field"><label for="promotionStart">Mulai</label><input id="promotionStart" name="start" type="date"></div>
+                                <div class="promotion-form-field"><label for="promotionEnd">Selesai</label><input id="promotionEnd" name="end" type="date"></div>
+                                <div class="promotion-form-field" id="promotionDiscountField"><label for="promotionDiscountType">Jenis diskon</label><select id="promotionDiscountType" name="discountType"><option value="percent">Persentase</option><option value="fixed">Nominal rupiah</option></select></div>
+                                <div class="promotion-form-field" id="promotionDiscountFieldValue"><label for="promotionDiscountValue">Nilai diskon</label><input id="promotionDiscountValue" name="discountValue" type="number" min="0" placeholder="10"></div>
+                                <div class="promotion-form-field" id="promotionBundlePrices" hidden><label for="promotionNormalPrice">Harga normal bundle</label><input id="promotionNormalPrice" name="normalPrice" type="number" min="0" placeholder="0"></div>
+                                <div class="promotion-form-field" id="promotionBundlePriceField" hidden><label for="promotionPackagePrice">Harga paket</label><input id="promotionPackagePrice" name="packagePrice" type="number" min="0" placeholder="0"></div>
+                                <div class="promotion-form-field" id="promotionChannelField" hidden><label for="promotionChannel">Channel</label><input id="promotionChannel" name="channel" type="text" placeholder="TikTok Shop / Live / Affiliate"></div>
+                                <div class="promotion-form-field" id="promotionTargetField" hidden><label for="promotionTarget">Target</label><input id="promotionTarget" name="target" type="text" placeholder="Produk baru / repeat order"></div>
+                                <div class="promotion-form-field"><label for="promotionUsage">Penggunaan saat ini</label><input id="promotionUsage" name="usage" type="number" min="0" value="0"></div>
+                                <div class="promotion-form-field"><label for="promotionStatus">Status</label><select id="promotionStatus" name="status"><option value="draft">Draft</option><option value="active">Aktif</option></select></div>
+                                <div class="promotion-form-actions"><button type="button" class="promotion-add-button secondary" data-promotion-cancel>Batal</button><button type="submit" class="promotion-add-button"><i class="bi bi-check2"></i> Simpan promosi</button></div>
+                            </form>
+                        </section>
                     </div>
                 </section>
 
@@ -2165,9 +2885,64 @@
                     </div>
                 </section>
 
+                <section class="page-view" data-page-view="incomeImport" hidden>
+                    <div class="income-wrap">
+                        <div class="income-hero">
+                            <div>
+                                <h2>Import keuangan, cek, dan audit</h2>
+                                <p>Upload laporan income TikTok Shop untuk memeriksa struktur file, duplikasi transaksi, rekonsiliasi total, dan riwayat penarikan sebelum disimpan ke database.</p>
+                            </div>
+                            <button type="button" class="income-btn" data-page-target="finance"><i class="bi bi-wallet2"></i> Lihat Transaksi</button>
+                        </div>
+                        <div class="income-layout">
+                            <aside class="income-card income-source-card">
+                                <div class="income-card-title">
+                                    <span class="card-icon"><i class="bi bi-shield-check"></i></span>
+                                    <div><h2>Sumber laporan</h2><p>Pilih toko dan satu file income XLSX.</p></div>
+                                </div>
+                                <label class="income-label" for="incomeStore">Toko tujuan</label>
+                                <select class="income-select" id="incomeStore"><option value="">Memuat toko database…</option></select>
+                                <label class="income-dropzone" id="incomeDropzone" for="incomeFiles">
+                                    <i class="bi bi-file-earmark-spreadsheet"></i>
+                                    <strong>Tarik laporan ke sini atau pilih file</strong>
+                                    <span>Format .xlsx · satu file setiap pemeriksaan</span>
+                                </label>
+                                <input class="income-input" type="file" id="incomeFiles" accept=".xlsx">
+                                <div id="incomeFileList"></div>
+                                <div class="income-note"><i class="bi bi-info-circle"></i><span>Audit di browser tidak mengubah database. Data baru disimpan setelah Anda menekan tombol import.</span></div>
+                                <div class="income-actions">
+                                    <button type="button" class="income-btn" id="incomeReset" disabled>Reset</button>
+                                    <button type="button" class="income-btn primary" id="incomePreviewBtn" disabled><i class="bi bi-search"></i> Cek &amp; audit</button>
+                                </div>
+                                <div class="income-status" id="incomeStatus" hidden></div>
+                            </aside>
+                            <section class="income-card income-preview-card">
+                                <div id="incomeEmptyState" class="income-empty"><div><i class="bi bi-clipboard2-check"></i><strong>Hasil audit akan muncul di sini</strong>Pilih toko dan unggah laporan income untuk memulai pemeriksaan.</div></div>
+                                <div id="incomePreviewState" hidden>
+                                    <div class="income-preview-head"><div><h2>Hasil cek &amp; audit</h2><p id="incomePreviewDescription">—</p></div><span class="income-pill"><i class="bi bi-eye"></i> Belum disimpan</span></div>
+                                    <div class="income-summary">
+                                        <div class="income-stat"><div class="income-stat-label">Baris detail</div><div class="income-stat-value" id="incomeDetailCount">0</div></div>
+                                        <div class="income-stat"><div class="income-stat-label">Pesanan</div><div class="income-stat-value" id="incomeOrderCount">0</div></div>
+                                        <div class="income-stat"><div class="income-stat-label">Penyesuaian</div><div class="income-stat-value" id="incomeAdjustmentCount">0</div></div>
+                                        <div class="income-stat"><div class="income-stat-label">Duplikat</div><div class="income-stat-value warning" id="incomeDuplicateCount">0</div></div>
+                                        <div class="income-stat"><div class="income-stat-label">Temuan error</div><div class="income-stat-value danger" id="incomeErrorCount">0</div></div>
+                                    </div>
+                                    <div class="income-section-title"><span>Checklist audit</span><small>Terminal review sebelum import</small></div>
+                                    <div class="income-check-grid" id="incomeAuditChecks"></div>
+                                    <div class="income-section-title"><span>Ringkasan laporan</span><small>Nilai dari sheet Laporan</small></div>
+                                    <div class="income-report" id="incomeReportRows"></div>
+                                    <div class="income-section-title"><span>Preview transaksi</span><small>Maksimal 100 baris pertama</small></div>
+                                    <div class="income-table-wrap"><table class="income-table"><thead><tr><th>Baris</th><th>ID referensi</th><th>Jenis</th><th>Waktu order</th><th>Waktu cair</th><th>Penyelesaian</th><th>Pendapatan</th><th>Biaya</th></tr></thead><tbody id="incomePreviewBody"></tbody></table></div>
+                                    <div class="income-preview-foot"><span><i class="bi bi-database-check"></i> Temuan warning tetap dicatat sebagai catatan batch audit.</span><button type="button" class="income-btn primary" id="incomeConfirmBtn" disabled><i class="bi bi-database-check"></i> Import ke database</button></div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </section>
+
                 <section class="page-view" data-page-view="shipmentImport" hidden>
                     <div class="shipment-wrap">
-                        <div class="workspace-notice shipment-browser-only"><i class="bi bi-info-circle"></i><span>Preview ini memakai penyimpanan browser. Tombol simpan saat ini belum menulis ke database dashboard. Data contoh di dashboard berasal dari impor database terpisah.</span></div>
+                        <div class="workspace-notice shipment-browser-only"><i class="bi bi-database-check"></i><span>Data akan disimpan ke database toko terpilih dan dipakai untuk mencocokkan transaksi di modul Transaksi.</span></div>
                         <div class="shipment-layout">
                             <div class="shipment-card shipment-sidebar-card">
                                 <div class="shipment-card-title">
@@ -2180,10 +2955,7 @@
 
                                 <label class="shipment-label" for="shipmentStore">Toko tujuan</label>
                                 <select class="shipment-select" id="shipmentStore">
-                                    <option value="">Pilih toko</option>
-                                    <option value="Toko Utama">Toko Utama</option>
-                                    <option value="Toko Fashion">Toko Fashion</option>
-                                    <option value="Toko Home Living">Toko Home Living</option>
+                                    <option value="">Memuat toko database…</option>
                                 </select>
 
                                 <label class="shipment-dropzone" id="shipmentDropzone" for="shipmentFiles">
@@ -2242,12 +3014,47 @@
                                         </table>
                                     </div>
                                     <div class="shipment-preview-foot">
-                                        <span><i class="bi bi-info-circle"></i> Hanya baris unik yang akan disimpan.</span>
-                                        <button type="button" class="shipment-btn primary" id="shipmentConfirmBtn" disabled><i class="bi bi-device-ssd"></i> Simpan di browser</button>
+                                        <span><i class="bi bi-info-circle"></i> Import bersifat aman untuk diulang: data yang sama akan diperbarui, bukan digandakan.</span>
+                                        <button type="button" class="shipment-btn primary" id="shipmentConfirmBtn" disabled><i class="bi bi-database-check"></i> Simpan ke database</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </section>
+
+                <section class="page-view" data-page-view="products" hidden>
+                    <div class="catalog-wrap">
+                        <div class="catalog-hero"><div><h2>Master produk</h2><p>Kelola identitas produk internal yang menjadi induk semua variant dan mapping marketplace.</p></div><span class="catalog-badge"><i class="bi bi-database-check"></i> CRUD aktif</span></div>
+                        <div class="catalog-layout">
+                            <section class="catalog-card catalog-form-card"><div class="catalog-card-title"><span class="catalog-card-icon"><i class="bi bi-box-seam"></i></span><div><h2 id="productFormTitle">Tambah produk</h2><p>Kode internal harus unik dalam workspace.</p></div></div>
+                                <form id="productForm"><div class="catalog-field"><label for="productCode">Kode internal *</label><input class="catalog-input" id="productCode" required placeholder="Contoh: PRD-JACKET-001"></div><div class="catalog-field"><label for="productName">Nama produk *</label><input class="catalog-input" id="productName" required placeholder="Nama produk internal"></div><div class="catalog-field"><label for="productBrand">Brand</label><input class="catalog-input" id="productBrand" placeholder="Opsional"></div><div class="catalog-field"><label for="productCategory">Kategori</label><input class="catalog-input" id="productCategory" placeholder="Opsional"></div><label class="catalog-check-input"><input type="checkbox" id="productActive" checked> Produk aktif</label><div class="catalog-form-actions"><button type="button" class="catalog-btn" id="productCancelBtn" hidden>Batal</button><button type="submit" class="catalog-btn primary" id="productSubmitBtn"><i class="bi bi-plus-lg"></i> Simpan produk</button></div></form><div class="catalog-status" id="productStatus" hidden></div>
+                            </section>
+                            <section class="catalog-card"><div class="catalog-list-head"><div><h2>Daftar produk</h2><p>Produk master yang tersedia untuk dibuatkan variant.</p></div><span class="workspace-badge" id="productCount">0 produk</span></div><div class="catalog-table-wrap"><table class="catalog-table"><thead><tr><th>Kode / nama</th><th>Brand</th><th>Kategori</th><th>Status</th><th>Variant</th><th>Aksi</th></tr></thead><tbody id="productTableBody"></tbody></table></div><div class="catalog-empty" id="productEmptyState" hidden><i class="bi bi-box-seam"></i><strong>Belum ada produk</strong>Tambahkan produk pertama dari form di sebelah kiri.</div></section>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="page-view" data-page-view="variants" hidden>
+                    <div class="catalog-wrap">
+                        <div class="catalog-hero"><div><h2>Produk variant</h2><p>Kelola SKU internal, barcode, nama variant, dan atribut sebelum dipakai pada mapping.</p></div><span class="catalog-badge"><i class="bi bi-diagram-3"></i> CRUD aktif</span></div>
+                        <div class="catalog-layout">
+                            <section class="catalog-card catalog-form-card"><div class="catalog-card-title"><span class="catalog-card-icon"><i class="bi bi-tags"></i></span><div><h2 id="variantFormTitle">Tambah variant</h2><p>Variant selalu berada di bawah satu produk.</p></div></div>
+                                <form id="variantForm"><div class="catalog-field"><label for="variantProduct">Produk induk *</label><select class="catalog-select" id="variantProduct" required><option value="">Pilih produk</option></select></div><div class="catalog-field"><label for="variantSku">SKU internal *</label><input class="catalog-input" id="variantSku" required placeholder="Contoh: JACKET-BLK-XL"></div><div class="catalog-field"><label for="variantName">Nama variant *</label><input class="catalog-input" id="variantName" required placeholder="Contoh: Hitam · XL"></div><div class="catalog-field"><label for="variantBarcode">Barcode</label><input class="catalog-input" id="variantBarcode" placeholder="Opsional"></div><div class="catalog-field"><label for="variantAttributes">Atribut JSON</label><textarea class="catalog-input" id="variantAttributes" rows="4" placeholder='{"warna":"Hitam","ukuran":"XL"}'>{}</textarea></div><label class="catalog-check-input"><input type="checkbox" id="variantActive" checked> Variant aktif</label><div class="catalog-form-actions"><button type="button" class="catalog-btn" id="variantCancelBtn" hidden>Batal</button><button type="submit" class="catalog-btn primary" id="variantSubmitBtn"><i class="bi bi-plus-lg"></i> Simpan variant</button></div></form><div class="catalog-status" id="variantStatus" hidden></div>
+                            </section>
+                            <section class="catalog-card"><div class="catalog-list-head"><div><h2>Daftar variant</h2><p>Filter berdasarkan produk untuk meninjau SKU internal.</p></div><div class="catalog-list-tools"><select class="catalog-select" id="variantProductFilter"><option value="">Semua produk</option></select><span class="workspace-badge" id="variantCount">0 variant</span></div></div><div class="catalog-table-wrap"><table class="catalog-table"><thead><tr><th>Produk</th><th>SKU / nama variant</th><th>Barcode</th><th>Atribut</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="variantTableBody"></tbody></table></div><div class="catalog-empty" id="variantEmptyState" hidden><i class="bi bi-tags"></i><strong>Belum ada variant</strong>Buat produk terlebih dahulu, lalu tambahkan variant.</div></section>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="page-view" data-page-view="orderMapping" hidden>
+                    <div class="catalog-wrap">
+                        <div class="catalog-hero"><div><h2>Mapping pesanan marketplace</h2><p>Kelompokkan item unmatched berdasarkan SKU lalu hubungkan ke produk dan variant internal. Snapshot order tidak disentuh.</p></div><span class="catalog-badge"><i class="bi bi-link-45deg"></i> Mapping aktif</span></div>
+                        <div class="catalog-toolbar"><div><span class="catalog-muted">Toko aktif</span><strong id="mappingStoreHint">—</strong></div><select class="catalog-select" id="mappingStore" aria-label="Pilih toko mapping"></select><select class="catalog-select" id="mappingStatusFilter" aria-label="Filter status mapping"><option value="unmatched">Belum termapping</option><option value="conflict">Konflik</option><option value="mapped">Sudah mapped</option><option value="ignored">Diabaikan</option></select><button type="button" class="catalog-btn" id="mappingRefreshBtn"><i class="bi bi-arrow-clockwise"></i> Refresh</button></div>
+                        <div class="catalog-status" id="mappingStatus" hidden></div>
+                        <section class="catalog-card mapping-backfill-card"><div class="catalog-list-head"><div><h2>Backfill data lama</h2><p>Preview dulu untuk mematerialisasi mapping SKU yang sudah jelas ke setiap order item. Proses ini idempotent dan tidak menebak item unmatched atau konflik.</p></div><div class="catalog-form-actions"><button type="button" class="catalog-btn" id="mappingBackfillPreviewBtn"><i class="bi bi-search"></i> Preview backfill</button><button type="button" class="catalog-btn primary" id="mappingBackfillApplyBtn" disabled><i class="bi bi-database-check"></i> Terapkan</button></div></div><div class="catalog-backfill-summary" id="mappingBackfillSummary"><span>Belum ada preview.</span></div><div class="catalog-status" id="mappingBackfillStatus" hidden></div></section>
+                        <section class="catalog-card"><div class="catalog-list-head"><div><h2>Item order</h2><p id="mappingItemCount">Memuat data…</p></div><span class="workspace-badge warning">Mapping per SKU</span></div><div class="catalog-table-wrap"><table class="catalog-table mapping-table"><thead><tr><th>SKU marketplace</th><th>Produk / variation dari order</th><th>Penggunaan</th><th>Target mapping</th></tr></thead><tbody id="mappingTableBody"></tbody></table></div><div class="catalog-empty" id="mappingEmptyState" hidden><i class="bi bi-check2-circle"></i><strong>Tidak ada item pada filter ini</strong>Semua item yang sesuai filter sudah selesai diproses.</div></section>
+                        <section class="catalog-card"><div class="catalog-list-head"><div><h2>Audit trail</h2><p>Riwayat perubahan master, mapping marketplace, dan backfill.</p></div><span class="workspace-badge" id="mappingAuditCount">50 terakhir</span></div><div class="catalog-table-wrap"><table class="catalog-table mapping-audit-table"><thead><tr><th>Waktu</th><th>Aksi / entity</th><th>Actor</th><th>Alasan</th><th>After</th></tr></thead><tbody id="mappingAuditBody"></tbody></table></div><div class="catalog-empty" id="mappingAuditEmpty"><i class="bi bi-clock-history"></i><strong>Belum ada audit</strong>Perubahan katalog akan muncul di sini.</div></section>
                     </div>
                 </section>
             </main>
