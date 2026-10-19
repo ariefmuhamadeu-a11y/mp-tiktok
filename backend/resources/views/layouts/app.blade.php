@@ -8,6 +8,22 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 </head>
 <body>
+    @php
+        $navigation = [
+            ['label' => 'Ringkasan', 'route' => 'dashboard'],
+            ['label' => 'Pesanan', 'route' => 'orders.index'],
+            ['label' => 'Pengiriman', 'route' => 'shipping.index'],
+            ['label' => 'Transaksi', 'route' => 'finance.index'],
+            ['label' => 'Promosi', 'route' => 'promotions.index'],
+            ['label' => 'Penentuan Harga', 'route' => 'pricing.index'],
+            ['label' => 'Import Keuangan', 'route' => 'imports.income.index'],
+            ['label' => 'Import Pengiriman', 'route' => 'imports.shipment.index'],
+            ['label' => 'Toko', 'route' => 'stores.index'],
+            ['label' => 'Produk', 'route' => 'products.index'],
+            ['label' => 'Produk Variant', 'route' => 'variants.index'],
+            ['label' => 'Mapping Pesanan', 'route' => 'mapping.index'],
+        ];
+    @endphp
     <div class="shell">
         <header class="topbar">
             <a class="brand" href="{{ route('dashboard') }}">
@@ -21,10 +37,9 @@
             <aside class="sidebar">
                 <p class="eyebrow">Workspace</p>
                 <nav class="nav-list" aria-label="Navigasi utama">
-                    <a class="active" href="#overview">Ringkasan</a>
-                    <a href="#orders">Pesanan</a>
-                    <a href="#imports">Import data</a>
-                    <a href="#stores">Toko</a>
+                    @foreach ($navigation as $item)
+                        <a class="{{ request()->routeIs($item['route']) ? 'active' : '' }}" href="{{ route($item['route']) }}">{{ $item['label'] }}</a>
+                    @endforeach
                 </nav>
                 <div class="sidebar-note">
                     <strong>Mode server-side</strong>

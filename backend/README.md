@@ -18,8 +18,11 @@ Buka `http://127.0.0.1:8000`.
 ## Struktur penting
 
 - `app/Http/Controllers/DashboardController.php`: halaman dashboard, toko, dan upload import.
+- `app/Http/Controllers/WorkspacePageController.php`: route halaman Pesanan, Pengiriman, Transaksi, dan modul workspace.
 - `app/Services/CommerceFileImporter.php`: import shipment CSV dan income XLSX.
+- `app/Services/WorkspacePageService.php`: query data untuk setiap halaman workspace.
 - `resources/views/dashboard.blade.php`: halaman utama Blade.
+- `resources/views/pages/`: halaman Blade terpisah per modul.
 - `public/css/app.css`: stylesheet tanpa bundler.
 - `routes/web.php`: route halaman dan form.
 
@@ -31,3 +34,7 @@ Dashboard menyediakan form server-side untuk:
 - Income `.xlsx`.
 
 Data diproses langsung oleh PHP dan disimpan ke SQLite. Import yang sama aman diulang karena batch file memiliki hash unik.
+
+## Halaman
+
+Route halaman aktif tersedia untuk dashboard, pesanan, pengiriman, transaksi, promosi, penentuan harga, import keuangan, import pengiriman, toko, produk, variant, dan mapping pesanan. Modul katalog/promosi yang belum memiliki migration Laravel menampilkan status persiapan sampai struktur databasenya dimigrasikan.

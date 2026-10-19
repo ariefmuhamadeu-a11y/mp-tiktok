@@ -39,6 +39,8 @@ Buka `http://127.0.0.1:8000`.
 - Import shipment CSV ke tabel order, paket, dan item.
 - Import income XLSX ke tabel transaksi dan transfer.
 - Riwayat batch import dan daftar order terbaru.
+- Navigasi multi-halaman Blade untuk Pesanan, Pengiriman, Transaksi, Toko, dan Import.
+- Route halaman untuk Promosi, Penentuan Harga, Produk, Variant, dan Mapping Pesanan.
 
 File import diproses server-side oleh `CommerceFileImporter`, sehingga tidak membutuhkan library JavaScript atau proses Vite.
 
@@ -46,13 +48,33 @@ File import diproses server-side oleh `CommerceFileImporter`, sehingga tidak mem
 
 ```text
 backend/
-├── app/Http/Controllers/DashboardController.php
+├── app/Http/Controllers/
+│   ├── DashboardController.php
+│   └── WorkspacePageController.php
 ├── app/Services/CommerceFileImporter.php
+├── app/Services/WorkspacePageService.php
 ├── database/migrations/
 ├── public/css/app.css
 ├── resources/views/layouts/app.blade.php
-├── resources/views/dashboard.blade.php
+├── resources/views/pages/
 └── routes/web.php
+```
+
+Route utama yang tersedia:
+
+```text
+/                  Dashboard
+/pesanan           Pesanan
+/pengiriman        Pengiriman
+/transaksi         Transaksi
+/promosi           Promosi
+/penentuan-harga   Penentuan Harga
+/import-keuangan   Import Keuangan
+/import-pengiriman Import Pengiriman
+/toko              Toko
+/produk            Produk
+/produk-variant    Produk Variant
+/mapping-pesanan   Mapping Pesanan
 ```
 
 ## Database

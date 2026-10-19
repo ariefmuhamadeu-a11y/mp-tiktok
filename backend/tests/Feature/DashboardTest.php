@@ -77,4 +77,20 @@ class DashboardTest extends TestCase
             'external_order_id' => 'ORDER-1',
         ]);
     }
+
+    public function test_workspace_pages_are_available_as_separate_blade_routes(): void
+    {
+        $user = User::factory()->create();
+        $store = Store::create([
+            'user_id' => $user->id,
+            'name' => 'Toko Pages',
+            'slug' => 'toko-pages',
+            'platform' => 'tiktok',
+            'is_active' => true,
+        ]);
+
+        foreach (['/pesanan', '/pengiriman', '/transaksi', '/toko', '/import-keuangan', '/import-pengiriman', '/promosi', '/penentuan-harga', '/produk', '/produk-variant', '/mapping-pesanan'] as $path) {
+            $this->get($path.'?store_id='.$store->id)->assertOk();
+        }
+    }
 }
